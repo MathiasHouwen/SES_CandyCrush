@@ -49,6 +49,36 @@ public class CheckNeighboursInGrid {
      * @return - Returns a 1D Iterable of ints, the Integers represent the indexes of all neighbours with the same value as the specified element on index 'indexToCheck'.
      */
     public static Iterable<Integer> getSameNeighboursIds(Iterable<Integer> grid, int width, int height, int indexToCheck) {
+        // throw expection when index is outo
+        if (indexToCheck<0){
+            throw new RuntimeException("Index kan niet lager zijn dan 0");
+        }
+        else if(indexToCheck >= width*height){
+            throw new RuntimeException("Index is grooter dan de max");
+        }
 
+        int[] parameters = getParameters(width, height, indexToCheck);
+
+        ArrayList<Integer> arrayGrid = new ArrayList<>();
+        for (Integer num : grid) {
+            arrayGrid.add(num);
+        }
+
+        int value = arrayGrid.get(indexToCheck);
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        for (int rij = parameters[0]; rij <= parameters[1]; rij++){
+            for (int col = parameters[2]; col <= parameters[3]; col++){
+                int index = indexToCheck + rij*width + col;
+
+                if (index == indexToCheck){
+                    continue;
+                }
+
+                if (value == arrayGrid.get(index)){
+                    result.add(index);
+                }
+            }
+        }
+        return result;
     }
 }
