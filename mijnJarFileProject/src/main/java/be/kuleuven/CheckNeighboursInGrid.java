@@ -100,7 +100,7 @@ public class CheckNeighboursInGrid {
                     continue;
                 }
 
-                // Als de waarden van buren gelijk is aan de index 
+                // Als de waarden van buren gelijk is aan de index
                 if (value == arrayGrid.get(index)){
                     result.add(index);
                 }
