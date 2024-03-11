@@ -3,8 +3,6 @@ package be.kuleuven;
 import java.util.ArrayList;
 
 public class CheckNeighboursInGrid {
-    /* rij dan  kolom*/
-
     /**
      *
      * @param width  - Specifies the width of the grid.
