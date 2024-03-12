@@ -10,8 +10,6 @@ public class CandycrushModel {
     private int width;
     private int height;
 
-
-
     public CandycrushModel(String speler) {
         this.speler = speler;
         speelbord = new ArrayList<>();
