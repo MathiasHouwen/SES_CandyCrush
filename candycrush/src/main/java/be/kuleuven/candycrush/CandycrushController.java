@@ -89,8 +89,7 @@ public class CandycrushController {
     }
 
     private void onResetClicked(MouseEvent me) {
-        model.resetScore();
-        model.stop();
+        model.reset();
         btn.setDisable(false);
         reset.setDisable(true);
         paneel.setStyle("-fx-background-color: white");

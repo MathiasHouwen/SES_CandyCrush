@@ -14,11 +14,11 @@ public class CandycrushModel {
     private int score;
     private boolean gestart;
 
-    public CandycrushModel(String speler) {
+    public CandycrushModel(String speler, int width, int height){
         this.speler = speler;
         speelbord = new ArrayList<>();
-        width = 4;
-        height = 4;
+        this.width = width;
+        this.height = height;
         score = 0;
         gestart = false;
 
@@ -27,6 +27,10 @@ public class CandycrushModel {
             int randomGetal = random.nextInt(5) + 1;
             speelbord.add(randomGetal);
         }
+    }
+
+    public CandycrushModel(String speler) {
+        this(speler, 4, 4);
     }
 
     public static void main(String[] args) {
@@ -65,7 +69,10 @@ public class CandycrushModel {
         return this.score;
     }
 
-    public void resetScore(){this.score =0;}
+    public void reset(){
+        this.score =0;
+        this.gestart = false;
+    }
 
     public boolean isGestart(){
         return this.gestart;
@@ -75,10 +82,8 @@ public class CandycrushModel {
         this.gestart = true;
     }
 
-    public void stop(){this.gestart = false;}
 
     public void candyWithIndexSelected(int index){
-        //TODO: update method so it also changes direct neighbours of same type and updates score
         if (index != -1){
             ArrayList<Integer> NeighboursIds = (ArrayList<Integer>) getSameNeighboursIds(this.speelbord, this.width, this.height, index);
 

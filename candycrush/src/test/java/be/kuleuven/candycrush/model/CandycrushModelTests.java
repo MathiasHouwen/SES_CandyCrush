@@ -19,7 +19,7 @@ public class CandycrushModelTests {
     public void score_waneerOpCandyCLick_verhoog() {
         CandycrushModel model = new CandycrushModel("Mathias");
         int score = model.getScore();
-        model.candyWithIndexSelected(6); // Verhoog score door candy
+        model.candyWithIndexSelected(model.getWidth()-1); // Verhoog score door candy
         assert (score < model.getScore());
     }
 
@@ -58,4 +58,36 @@ public class CandycrushModelTests {
 
         assert (results.equals(correctResults));
     }
+
+    @Test
+    public void randomList_whenGenrated_isUnieke(){
+        CandycrushModel model1 = new CandycrushModel("Naam");
+        CandycrushModel model2 = new CandycrushModel("Naam");
+        assert (!model2.equals(model1));
+    }
+
+    @Test
+    public void bezigspel_alsGerest_stopt(){
+        CandycrushModel model = new CandycrushModel("Naam");
+        model.start();
+        model.reset();
+        assert (!model.isGestart());
+    }
+
+    @Test
+    public void gestoptSpel_kanTerug_starten(){
+        CandycrushModel model = new CandycrushModel("Naam");
+        model.start();
+        assert (model.isGestart());
+    }
+
+    @Test
+    public void spel_datGestoptIs_scoreReset(){
+        CandycrushModel model = new CandycrushModel("Naam");
+        model.start();
+        model.candyWithIndexSelected(model.getWidth()-1);
+        model.reset();
+        assert (model.getScore() == 0);
+    }
+
 }
