@@ -90,4 +90,24 @@ public class CandycrushModelTests {
         assert (model.getScore() == 0);
     }
 
+    @Test
+    public void spel_DatwordtAangemaakt_correctBreete(){
+        int w = 6;
+        CandycrushModel model = new CandycrushModel("Naam", w, 6);
+        assert (model.getWidth() == w);
+    }
+
+    @Test
+    public void spel_DatwordtAangemaakt_correctHoogte(){
+        int h = 6;
+        CandycrushModel model = new CandycrushModel("Naam", 6, h);
+        assert (model.getHeight() == h);
+    }
+
+    @Test
+    public void foutiveIndex_wordtDoorgegeven_EnScoreVeranderdNiet() {
+        CandycrushModel model = new CandycrushModel("Player");
+        model.candyWithIndexSelected(-1);
+        assert (model.getScore() == 0);
+    }
 }
