@@ -14,14 +14,6 @@ public class CandycrushModel {
     private int score;
     private boolean gestart;
 
-    public boolean isGestart(){
-        return this.gestart;
-    }
-
-    public void start(){
-        this.gestart = true;
-    }
-
     public CandycrushModel(String speler) {
         this.speler = speler;
         speelbord = new ArrayList<>();
@@ -72,6 +64,18 @@ public class CandycrushModel {
     public int getScore(){
         return this.score;
     }
+
+    public void resetScore(){this.score =0;}
+
+    public boolean isGestart(){
+        return this.gestart;
+    }
+
+    public void start(){
+        this.gestart = true;
+    }
+
+    public void stop(){this.gestart = false;}
 
     public void candyWithIndexSelected(int index){
         //TODO: update method so it also changes direct neighbours of same type and updates score

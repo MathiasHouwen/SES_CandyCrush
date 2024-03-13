@@ -9,14 +9,14 @@ import static be.kuleuven.CheckNeighboursInGrid.getSameNeighboursIds;
 public class CandycrushModelTests {
     // gegeven_wanneer_dan
     @Test
-    public void NaamVanSpeler_AlsdieCorrectterugkomt_danTrue(){
+    public void NaamVanSpeler_AlsdieCorrectterugkomt_danTrue() {
         CandycrushModel model = new CandycrushModel("Mathias");
         String result = model.getSpeler();
         assert (result.equals("Mathias"));
     }
 
     @Test
-    public void score_waneerOpCandyCLick_verhoog(){
+    public void score_waneerOpCandyCLick_verhoog() {
         CandycrushModel model = new CandycrushModel("Mathias");
         int score = model.getScore();
         model.candyWithIndexSelected(6); // Verhoog score door candy
@@ -26,12 +26,12 @@ public class CandycrushModelTests {
     @Test
     void wanneerRowEnCol_bereken_index() {
         CandycrushModel model = new CandycrushModel("Mathias");
-        int index = model.getIndexFromRowColumn(1,0);
+        int index = model.getIndexFromRowColumn(1, 0);
         assert (index == model.getWidth());
     }
 
     @Test
-    void test(){
+    void grid_calucatesNeighber_correct() {
         ArrayList<Integer> grid = new ArrayList<>();
         grid.add(0);
         grid.add(0);
@@ -50,14 +50,12 @@ public class CandycrushModelTests {
         grid.add(1);
         grid.add(1);
 
-        Iterable<Integer> resulte = getSameNeighboursIds(grid, 4, 4, 5);
-    }
+        ArrayList<Integer> results = (ArrayList<Integer>) getSameNeighboursIds(grid, 4, 4, 5);
+        ArrayList<Integer> correctResults = new ArrayList<>();
+        correctResults.add(2);
+        correctResults.add(4);
+        correctResults.add(10);
 
-    @Test
-    void getWidth() {
-    }
-
-    @Test
-    void getHeight() {
+        assert (results.equals(correctResults));
     }
 }

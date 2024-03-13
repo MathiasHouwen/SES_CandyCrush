@@ -32,6 +32,9 @@ public class CandycrushController {
     private Button btn;
 
     @FXML
+    private Button reset;
+
+    @FXML
     private AnchorPane paneel;
 
     @FXML
@@ -55,6 +58,8 @@ public class CandycrushController {
         speelbord.getChildren().add(view);
         view.setOnMouseClicked(this::onCandyClicked);
         btn.setOnMouseClicked(this::onStartClicked);
+        reset.setOnMouseClicked(this::onResetClicked);
+        reset.setDisable(true);
     }
 
     public void update(){
@@ -69,6 +74,8 @@ public class CandycrushController {
     }
 
     public void onStartClicked(MouseEvent me){
+        btn.setDisable(true);
+        reset.setDisable(false);
         if(textInput.getText().equals("Mathias")){
             paneel.setStyle("-fx-background-color: blue;");
             if (!model.isGestart()){
@@ -80,4 +87,14 @@ public class CandycrushController {
         }
         update();
     }
+
+    private void onResetClicked(MouseEvent me) {
+        model.resetScore();
+        model.stop();
+        btn.setDisable(false);
+        reset.setDisable(true);
+        paneel.setStyle("-fx-background-color: white");
+        update();
+    }
+
 }
