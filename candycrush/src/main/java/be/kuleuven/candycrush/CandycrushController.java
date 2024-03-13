@@ -11,6 +11,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.paint.Color;
 
 public class CandycrushController {
 
@@ -22,6 +24,9 @@ public class CandycrushController {
 
     @FXML
     private Label Label;
+
+    @FXML
+    private Label scoreBoard;
 
     @FXML
     private Button btn;
@@ -44,13 +49,16 @@ public class CandycrushController {
         assert paneel != null : "fx:id=\"paneel\" was not injected: check your FXML file 'candycrush-view.fxml'.";
         assert speelbord != null : "fx:id=\"speelbord\" was not injected: check your FXML file 'candycrush-view.fxml'.";
         assert textInput != null : "fx:id=\"textInput\" was not injected: check your FXML file 'candycrush-view.fxml'.";
+        assert scoreBoard != null : "fx:id=\"scoreBoard\"was not injected: check your FXML file 'candycrush-view.fxml'.";
         model = new CandycrushModel("Test");
         view = new CandycrushView(model);
         speelbord.getChildren().add(view);
         view.setOnMouseClicked(this::onCandyClicked);
+        btn.setOnMouseClicked(this::onStartClicked);
     }
 
     public void update(){
+        scoreBoard.setText(String.format("Score: %d", model.getScore()));
         view.update();
     }
 
@@ -60,4 +68,16 @@ public class CandycrushController {
         update();
     }
 
+    public void onStartClicked(MouseEvent me){
+        if(textInput.getText().equals("Mathias")){
+            paneel.setStyle("-fx-background-color: blue;");
+            if (!model.isGestart()){
+                model.start();
+            }
+        }
+        else {
+            paneel.setStyle("-fx-background-color: red;");
+        }
+        update();
+    }
 }

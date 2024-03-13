@@ -24,6 +24,12 @@ public class CandycrushView extends Region {
 
     public void update(){
         getChildren().clear();
+        if(model.isGestart()){
+            grid();
+        }
+    }
+
+    public void grid(){
         int i = 0;
         int height = 0;
         Iterator<Integer> iter = model.getSpeelbord().iterator();
@@ -56,5 +62,9 @@ public class CandycrushView extends Region {
             System.out.println(index);
         }
         return index;
+    }
+
+    public void veranderAchtergrond(){
+        //
     }
 }
