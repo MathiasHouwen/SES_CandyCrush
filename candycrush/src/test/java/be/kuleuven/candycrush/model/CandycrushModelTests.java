@@ -2,6 +2,10 @@ package be.kuleuven.candycrush.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
+import static be.kuleuven.CheckNeighboursInGrid.getSameNeighboursIds;
+
 public class CandycrushModelTests {
     // gegeven_wanneer_dan
     @Test
@@ -24,6 +28,29 @@ public class CandycrushModelTests {
         CandycrushModel model = new CandycrushModel("Mathias");
         int index = model.getIndexFromRowColumn(1,0);
         assert (index == model.getWidth());
+    }
+
+    @Test
+    void test(){
+        ArrayList<Integer> grid = new ArrayList<>();
+        grid.add(0);
+        grid.add(0);
+        grid.add(1);
+        grid.add(0);
+        grid.add(1);
+        grid.add(1);
+        grid.add(0);
+        grid.add(2);
+        grid.add(2);
+        grid.add(0);
+        grid.add(1);
+        grid.add(3);
+        grid.add(0);
+        grid.add(1);
+        grid.add(1);
+        grid.add(1);
+
+        Iterable<Integer> resulte = getSameNeighboursIds(grid, 4, 4, 5);
     }
 
     @Test

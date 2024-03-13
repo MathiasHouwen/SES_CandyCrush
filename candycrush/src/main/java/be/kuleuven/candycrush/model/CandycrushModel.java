@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
-import static be.kuleuven.CheckNeighboursInGrid;
+import static be.kuleuven.CheckNeighboursInGrid.*;
 
 public class CandycrushModel {
     private String speler;
@@ -76,14 +76,14 @@ public class CandycrushModel {
     public void candyWithIndexSelected(int index){
         //TODO: update method so it also changes direct neighbours of same type and updates score
         if (index != -1){
-            //ArrayList<Integer> NeighboursIds = (ArrayList<Integer>) getSameNeighboursIds(this.speelbord, this.width, this.height, index);
+            ArrayList<Integer> NeighboursIds = (ArrayList<Integer>) getSameNeighboursIds(this.speelbord, this.width, this.height, index);
 
             Random random = new Random();
-            /*for(int id : NeighboursIds){
+            for(int id : NeighboursIds){
                 int randomGetal = random.nextInt(5) + 1;
                 speelbord.set(id ,randomGetal);
                 score = score + 2;
-            }*/
+            }
             int randomGetal = random.nextInt(5) + 1;
             speelbord.set(index,randomGetal);
             score++;
