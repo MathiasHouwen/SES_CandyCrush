@@ -42,6 +42,8 @@ dependencies {
     implementation('be.kuleuven:mijnJarFileProject:1.0-SNAPSHOT')
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    testImplementation("org.assertj:assertj-core:3.25.1")
+
 }
 
 test {

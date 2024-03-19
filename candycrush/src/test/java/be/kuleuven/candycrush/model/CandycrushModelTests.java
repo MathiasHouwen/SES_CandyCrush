@@ -110,4 +110,13 @@ public class CandycrushModelTests {
         model.candyWithIndexSelected(-1);
         assert (model.getScore() == 0);
     }
+
+    // Position
+    @Test
+    public void fromIndex_geeftjuistindex_terug(){
+        BoardSize size = new BoardSize(4, 3);
+        Position goeiePos = new Position(2, 2, size);
+
+        assert (goeiePos.equals(Position.fromIndex(8, size)));
+    }
 }
