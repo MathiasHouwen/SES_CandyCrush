@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public record Position(int rij, int kolom, BoardSize boardSize) {
     public Position {
-        if(rij <0 && rij > boardSize().rijen()) throw new IllegalArgumentException("Rij moet groter dan nul zijn en lager dan het aantal rijen van de boardsize");
-        if(kolom <0 && rij > boardSize().kolommen()) throw new IllegalArgumentException("Rij moet groter dan nul zijn en lager dan het aantal rijen van de boardsize");
+        if(rij <0 || rij > boardSize.rijen()-1) throw new IllegalArgumentException("Rij moet groter dan nul zijn en lager dan het aantal rijen van de boardsize");
+        if(kolom <0 || kolom > boardSize.kolommen()-1) throw new IllegalArgumentException("Rij moet groter dan nul zijn en lager dan het aantal rijen van de boardsize");
     }
 
     public int getIndexFromRowColumn() {
-        return kolom + rij * boardSize().kolommen();
+        return kolom + rij * boardSize.kolommen();
     }
 
     public static Position fromIndex(int index, BoardSize size){
@@ -20,6 +20,17 @@ public record Position(int rij, int kolom, BoardSize boardSize) {
 
         return new Position(rij, kolom, size);
     }
+
+    public static void main(String[] args) {
+        BoardSize size = new BoardSize(4, 3);
+        Position linkseHoek = new Position(0, 0, size);
+        ArrayList<Position> neighbors = (ArrayList<Position>) linkseHoek.neighborPositions();
+        ArrayList<Position> test = new ArrayList<>();
+        test.add(new Position(1,2, size));
+        test.add(new Position(0, 1, size));
+        assert (neighbors.equals(test));
+    }
+
     private boolean isValidPosition(int newRow, int newCol) {
         try {
             Position testPos = new Position(newRow, newCol, boardSize);
@@ -49,7 +60,6 @@ public record Position(int rij, int kolom, BoardSize boardSize) {
     }
 
     public boolean isLastColumn(){
-        if (kolom == boardSize().kolommen()-1){return true;}
-        return false;
+        return kolom == boardSize().kolommen() - 1;
     }
 }

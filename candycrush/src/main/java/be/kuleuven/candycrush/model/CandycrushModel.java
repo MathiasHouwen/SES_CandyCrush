@@ -9,16 +9,15 @@ import static be.kuleuven.CheckNeighboursInGrid.*;
 public class CandycrushModel {
     private String speler;
     private ArrayList<Integer> speelbord;
-    private int width;
-    private int height;
     private int score;
     private boolean gestart;
+    private BoardSize boardSize;
 
     public CandycrushModel(String speler, int width, int height){
         this.speler = speler;
         speelbord = new ArrayList<>();
-        this.width = width;
-        this.height = height;
+        boardSize = new BoardSize(height, width);
+
         score = 0;
         gestart = false;
 
