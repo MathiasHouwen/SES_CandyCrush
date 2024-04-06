@@ -1,4 +1,4 @@
-package be.kuleuven.candycrush.model;
+package be.kuleuven.candycrush;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,7 @@ public record Position(int rij, int kolom, BoardSize boardSize) {
         if(kolom <0 || kolom > boardSize.kolommen()-1) throw new IllegalArgumentException("Rij moet groter dan nul zijn en lager dan het aantal rijen van de boardsize");
     }
 
-    public int getIndexFromRowColumn() {
+    public int getIndex() {
         return kolom + rij * boardSize.kolommen();
     }
 

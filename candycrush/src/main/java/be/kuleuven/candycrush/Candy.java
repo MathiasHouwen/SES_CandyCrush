@@ -1,4 +1,4 @@
-package be.kuleuven.candycrush.model;
+package be.kuleuven.candycrush;
 
 public sealed interface Candy permits NormalCandy, Kropsla, Tomaat, Lente_ui, Erwt {
 
@@ -6,7 +6,7 @@ public sealed interface Candy permits NormalCandy, Kropsla, Tomaat, Lente_ui, Er
 
 record NormalCandy(int colour) implements Candy{
     NormalCandy {
-        if(colour < 0 || colour > 3) throw new IllegalArgumentException();
+        if(colour < 0 || colour > 3) throw new IllegalArgumentException("Value is " + colour);
     }
 }
 record Kropsla() implements Candy{}
