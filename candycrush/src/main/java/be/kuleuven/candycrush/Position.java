@@ -21,16 +21,6 @@ public record Position(int rij, int kolom, BoardSize boardSize) {
         return new Position(rij, kolom, size);
     }
 
-    public static void main(String[] args) {
-        BoardSize size = new BoardSize(4, 3);
-        Position linkseHoek = new Position(0, 0, size);
-        ArrayList<Position> neighbors = (ArrayList<Position>) linkseHoek.neighborPositions();
-        ArrayList<Position> test = new ArrayList<>();
-        test.add(new Position(1,2, size));
-        test.add(new Position(0, 1, size));
-        assert (neighbors.equals(test));
-    }
-
     private boolean isValidPosition(int newRow, int newCol) {
         try {
             Position testPos = new Position(newRow, newCol, boardSize);

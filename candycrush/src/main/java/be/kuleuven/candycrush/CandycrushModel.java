@@ -1,5 +1,7 @@
 package be.kuleuven.candycrush;
 
+import javafx.geometry.Pos;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,7 +10,6 @@ import static be.kuleuven.CheckNeighboursInGrid.*;
 public class CandycrushModel {
     private String speler;
     private ArrayList<Candy> speelbord;
-    private ArrayList<Integer> intBoard;
     private int score;
     private boolean gestart;
     private BoardSize boardSize;
@@ -16,42 +17,14 @@ public class CandycrushModel {
     public CandycrushModel(String speler, int width, int height){
         this.speler = speler;
         speelbord = new ArrayList<>();
-        intBoard = new ArrayList<>();
         boardSize = new BoardSize(height, width);
 
         score = 0;
         gestart = false;
 
         for (int i = 0; i < width*height; i++){
-            Random random = new Random();
-            int randomGetal = random.nextInt(7) + 1;
-
-            speelbord.add(randomCandy(randomGetal));
-            intBoard.add(randomGetal);
+            speelbord.add(randomCandy());
         }
-    }
-
-    public Candy randomCandy(int randomGetal){
-
-        Candy c;
-        switch (randomGetal){
-            case 4:
-                c = new Erwt();
-                break;
-            case 5:
-                c = new Kropsla();
-                break;
-            case 6:
-                c = new Lente_ui();
-                break;
-            case 7:
-                c = new Tomaat();
-                break;
-            default:
-                c = new NormalCandy(randomGetal);
-                break;
-        }
-        return c;
     }
 
     public CandycrushModel(String speler) {
@@ -82,11 +55,6 @@ public class CandycrushModel {
         return this.score;
     }
 
-    public void reset(){
-        this.score =0;
-        this.gestart = false;
-    }
-
     public boolean isGestart(){
         return this.gestart;
     }
@@ -95,22 +63,58 @@ public class CandycrushModel {
         this.gestart = true;
     }
 
-    //TODO
-    // DEZE HELE FUNC MOET AANGEPAST WARDEN AAAH PIJN
-    public void candyWithIndexSelected(Position position){
-        ArrayList<Integer> NeighboursIds
-                = (ArrayList<Integer>) getSameNeighboursIds(this.intBoard, getWidth(), getHeight(), position.getIndex());
+    public void reset(){
+        this.score =0;
+        this.gestart = false;
+    }
 
+    public Candy randomCandy(){
         Random random = new Random();
-        for(int id : NeighboursIds){
-            int randomGetal = random.nextInt(5) + 1;
-            speelbord.set(id, randomCandy(randomGetal));
-            intBoard.set(id, randomGetal);
+        int randomGetal = random.nextInt(5) + 1;
+
+        Candy c;
+        switch (randomGetal){
+            case 4:
+                c = new Erwt();
+                break;
+            case 5:
+                c = new Kropsla();
+                break;
+            case 6:
+                c = new Lente_ui();
+                break;
+            case 7:
+                c = new Tomaat();
+                break;
+            default:
+                c = new NormalCandy(randomGetal);
+                break;
+        }
+        return c;
+    }
+
+    public void candyWithIndexSelected(Position position){
+        Iterable<Position> Neighbours = getSameNeighbourPositions(position);
+
+        for(Position Neighbour : Neighbours){
+            speelbord.set(Neighbour.getIndex(), randomCandy());
             score = score + 2;
         }
-        int randomGetal = random.nextInt(5) + 1;
-        speelbord.set(position.getIndex(), randomCandy(randomGetal));
-        intBoard.set(position.getIndex(), randomGetal);
+        speelbord.set(position.getIndex(), randomCandy());
         score++;
+    }
+
+    Iterable<Position> getSameNeighbourPositions(Position position){
+        Iterable<Position> neighbors = position.neighborPositions();
+        ArrayList<Position> result = new ArrayList<>();
+
+        for(Position neighbor : neighbors){
+            Candy candy = speelbord.get(position.getIndex());
+            Candy neighborCandy = speelbord.get(neighbor.getIndex());
+            if(candy.equals(neighborCandy)){
+                result.add(neighbor);
+            }
+        }
+        return result;
     }
 }

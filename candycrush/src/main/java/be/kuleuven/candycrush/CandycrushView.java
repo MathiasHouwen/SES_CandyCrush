@@ -44,12 +44,6 @@ public class CandycrushView extends Region {
             Position position = new Position(height, i, model.getBoardSize());
             Node node = makeCandyShape(position, candy);
 
-
-            // TODO: REMOVE
-            /*Text text = new Text("" + candy);
-            text.setX(rectangle.getX() + (rectangle.getWidth() - text.getBoundsInLocal().getWidth()) / 2);
-            text.setY(rectangle.getY() + (rectangle.getHeight() + text.getBoundsInLocal().getHeight()) / 2);*/
-
             getChildren().addAll(rectangle,node);
 
             if (i == model.getWidth() - 1) {
