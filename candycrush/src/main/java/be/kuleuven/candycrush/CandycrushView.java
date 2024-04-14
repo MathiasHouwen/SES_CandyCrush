@@ -104,7 +104,7 @@ public class CandycrushView extends Region {
     }
     private Circle makeCirc(Position position, Paint paint){
         Circle c;
-        c = new Circle(position.kolom() * widthCandy, position.rij() * heigthCandy, widthCandy/2);
+        c = new Circle(position.kolom() * widthCandy + widthCandy/2, position.rij() * heigthCandy + heigthCandy/2, widthCandy/2);
         c.setFill(paint);
         return c;
     }
