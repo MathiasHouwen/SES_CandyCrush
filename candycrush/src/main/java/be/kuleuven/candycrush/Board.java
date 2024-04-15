@@ -12,4 +12,6 @@ public class Board<E> {
     public void replaceCellAt(Position position, E newCell){
         cells[position.getIndex()] = newCell;
     }
+
+
 }
