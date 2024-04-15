@@ -33,8 +33,9 @@ public record Position(int rij, int kolom, BoardSize boardSize) {
     public Iterable<Position> neighborPositions(){
         ArrayList<Position> neighbors = new ArrayList<>();
 
-        // Mogelijke buren: links, rechts, boven, onder
-        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        // Mogelijke buren: links, rechts, boven, onder, ...
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1},    // direct
+                              {-1, -1}, {-1, 1}, {1, -1}, {1, 1}}; // diagonalen
 
         for (int[] dir : directions) {
             int newRow = rij + dir[0];

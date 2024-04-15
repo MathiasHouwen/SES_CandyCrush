@@ -18,21 +18,6 @@ public class CandycrushModelTests {
         assert (result.equals("Mathias"));
     }
 
-    /*@Test
-    public void score_waneerOpCandyCLick_verhoog() {
-        CandycrushModel model = new CandycrushModel("Mathias");
-        int score = model.getScore();
-        model.candyWithIndexSelected(model.getWidth()-1); // Verhoog score door candy
-        assert (score < model.getScore());
-    }*/
-
-    /*@Test
-    void wanneerRowEnCol_bereken_index() {
-        CandycrushModel model = new CandycrushModel("Mathias");
-        int index = model.getIndexFromPosition(1, 0);
-        assert (index == model.getWidth());
-    }*/
-
     @Test
     void grid_calucatesNeighber_correct() {
         ArrayList<Integer> grid = new ArrayList<>();
@@ -106,13 +91,6 @@ public class CandycrushModelTests {
         CandycrushModel model = new CandycrushModel("Naam", 6, h);
         assert (model.getHeight() == h);
     }
-
-    /*@Test
-    public void foutiveIndex_wordtDoorgegeven_EnScoreVeranderdNiet() {
-        CandycrushModel model = new CandycrushModel("Player");
-        model.candyWithIndexSelected(-1);
-        assert (model.getScore() == 0);
-    }*/
 
     // Position
     @Test

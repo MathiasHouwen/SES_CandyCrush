@@ -70,27 +70,15 @@ public class CandycrushModel {
 
     public Candy randomCandy(){
         Random random = new Random();
-        int randomGetal = random.nextInt(5) + 1;
+        int randomGetal = random.nextInt(8);
 
-        Candy c;
-        switch (randomGetal){
-            case 4:
-                c = new Erwt();
-                break;
-            case 5:
-                c = new Kropsla();
-                break;
-            case 6:
-                c = new Lente_ui();
-                break;
-            case 7:
-                c = new Tomaat();
-                break;
-            default:
-                c = new NormalCandy(randomGetal);
-                break;
-        }
-        return c;
+        return switch (randomGetal) {
+            case 4 -> new Erwt();
+            case 5 -> new Kropsla();
+            case 6 -> new Lente_ui();
+            case 7 -> new Tomaat();
+            default -> new NormalCandy(randomGetal);
+        };
     }
 
     public void candyWithIndexSelected(Position position){
