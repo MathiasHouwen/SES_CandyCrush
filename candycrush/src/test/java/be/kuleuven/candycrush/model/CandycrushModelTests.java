@@ -69,15 +69,6 @@ public class CandycrushModelTests {
         assert (model.isGestart());
     }
 
-    /*@Test
-    public void spel_datGestoptIs_scoreReset(){
-        CandycrushModel model = new CandycrushModel("Naam");
-        model.start();
-        model.candyWithIndexSelected(model.getWidth()-1);
-        model.reset();
-        assert (model.getScore() == 0);
-    }*/
-
     @Test
     public void spel_DatwordtAangemaakt_correctBreete(){
         int w = 6;
@@ -109,6 +100,7 @@ public class CandycrushModelTests {
         ArrayList<Position> test = new ArrayList<>();
         test.add(new Position(1, 0, size));
         test.add(new Position(0,1, size));
+        test.add(new Position(1,1,size));
         assert (neighbors.equals(test));
     }
 
@@ -120,6 +112,7 @@ public class CandycrushModelTests {
         ArrayList<Position> test = new ArrayList<>();
         test.add(new Position(1,2, size));
         test.add(new Position(0, 1, size));
+        test.add(new Position(1,1,size));
         assert (neighbors.equals(test));
     }
 
@@ -131,6 +124,7 @@ public class CandycrushModelTests {
         ArrayList<Position> test = new ArrayList<>();
         test.add(new Position(2, 0, size));
         test.add(new Position(3,1, size));
+        test.add(new Position(2,1,size));
         assert (neighbors.equals(test));
     }
 
@@ -142,6 +136,8 @@ public class CandycrushModelTests {
         ArrayList<Position> test = new ArrayList<>();
         test.add(new Position(2,2, size));
         test.add(new Position(3, 1, size));
+        test.add(new Position(2,1,size));
         assert (neighbors.equals(test));
     }
+
 }
