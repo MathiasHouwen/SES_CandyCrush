@@ -1,5 +1,6 @@
 package be.kuleuven.candycrush.model;
 
+import be.kuleuven.candycrush.Board;
 import be.kuleuven.candycrush.BoardSize;
 import be.kuleuven.candycrush.CandycrushModel;
 import be.kuleuven.candycrush.Position;
