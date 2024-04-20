@@ -33,7 +33,8 @@ public class CandycrushView extends Region {
     public void grid(){
         int i = 0;
         int height = 0;
-        Iterator<Candy> iter = model.getSpeelbord().iterator();
+        Iterator<Candy> iter = model.getSpeelbord().getCells();
+
         while(iter.hasNext()) {
             Candy candy = iter.next();
 

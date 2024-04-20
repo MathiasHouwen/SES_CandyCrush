@@ -1,7 +1,7 @@
 package be.kuleuven.candycrush;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Function;
 public class Board<E> {
@@ -14,6 +14,10 @@ public class Board<E> {
     }
     public BoardSize getBoardSize() {
         return boardSize;
+    }
+
+    public Iterator<E> getCells(){
+        return cells.iterator();
     }
 
     public E getCellAt(Position position){
