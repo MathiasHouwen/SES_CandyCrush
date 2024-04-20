@@ -2,6 +2,7 @@ package be.kuleuven.candycrush;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 public class Board<E> {
@@ -10,7 +11,7 @@ public class Board<E> {
 
     public Board(BoardSize boardSize) {
         this.boardSize = boardSize;
-        cells = new ArrayList<>(9);
+        cells = new ArrayList<>();
     }
     public BoardSize getBoardSize() {
         return boardSize;
