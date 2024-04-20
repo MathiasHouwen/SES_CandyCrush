@@ -22,7 +22,7 @@ public class BoardTest {
 
         assertNotNull(board);
     }
-    /*@Test
+    @Test
     public void testDatBoardKopierd(){
         BoardSize size = new BoardSize(3,3);
         Board<Integer> board = new Board<>(size);
@@ -33,5 +33,5 @@ public class BoardTest {
 
         board.copyTo(otherBoard);
         assert board.equals(otherBoard);
-    }*/
+    }
 }

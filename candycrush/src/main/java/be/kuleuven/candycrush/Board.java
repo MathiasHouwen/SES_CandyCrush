@@ -2,11 +2,11 @@ package be.kuleuven.candycrush;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.function.Function;
 public class Board<E> {
     private ArrayList<E> cells;
     private BoardSize boardSize;
-    private CandycrushModel model;
 
     public Board(BoardSize boardSize) {
         this.boardSize = boardSize;
@@ -30,12 +30,20 @@ public class Board<E> {
         }
     }
 
-    /*public void copyTo(Board<E> otherBoard){
+    public void copyTo(Board<E> otherBoard){
         if(!(boardSize.equals(otherBoard.getBoardSize()))){
             throw new RuntimeException("Boards not same size");
         }
         for (int i = 0; i <boardSize.kolommen() *  boardSize.rijen(); i++){
-            otherBoard.cells[i] = this.cells[i];
+            otherBoard.cells.add(cells.get(i));
         }
-    }*/
+    }
+
+    @Override // Deze methode is gegenegeerd door Intellij
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board<?> board = (Board<?>) o;
+        return Objects.equals(cells, board.cells) && Objects.equals(boardSize, board.boardSize);
+    }
 }
