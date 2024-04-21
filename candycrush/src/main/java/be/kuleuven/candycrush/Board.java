@@ -53,6 +53,16 @@ public class Board<E> {
         }
     }
 
+    public List<E> getPositionsOfElement(E element){
+        ArrayList<E> list = new ArrayList<>();
+        for (E cell : positions.keySet()){
+            if(element.equals(cell)){
+                list.add(cell);
+            }
+        }
+        return Collections.unmodifiableList(list);
+    }
+
     @Override // Deze methode is gegenegeerd door Intellij
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -89,6 +89,7 @@ public class CandycrushModel {
         score++;
     }
 
+    // TODO: WITH MAP THIS SOMEHOW BROKE IDK?
     Iterable<Position> getSameNeighbourPositions(Position position){
         Iterable<Position> neighbors = position.neighborPositions();
         ArrayList<Position> result = new ArrayList<>();
