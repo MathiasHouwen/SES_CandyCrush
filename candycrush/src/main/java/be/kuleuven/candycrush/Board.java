@@ -1,37 +1,46 @@
 package be.kuleuven.candycrush;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 public class Board<E> {
-    private ArrayList<E> cells;
+    private Map<Position, E> cells;
+    private Map<E, Position> positions;
     private BoardSize boardSize;
 
     public Board(BoardSize boardSize) {
         this.boardSize = boardSize;
-        cells = new ArrayList<>();
+        this.cells = new HashMap<>();
+        this.positions = new HashMap<>();
     }
+
     public BoardSize getBoardSize() {
         return boardSize;
     }
 
+    // TODO: MAKE MAPPY
     public Iterator<E> getCells(){
-        return cells.iterator();
+        ArrayList<E> list = new ArrayList<>();
+        for (Position position : cells.keySet()){
+            list.add(cells.get(position));
+        }
+        return list.iterator();
     }
 
     public E getCellAt(Position position){
-        return cells.get(position.getIndex());
+        return cells.get(position);
     }
 
     public void replaceCellAt(Position position, E newCell){
-        cells.set(position.getIndex(), newCell);
+        cells.put(position, newCell);
+        positions.put(newCell, position);
     }
 
     public void fill(Function<Position, E> cellCreator){
-        for (int i = 0; i  <boardSize.kolommen() *  boardSize.rijen(); i++) {
-            cells.add(cellCreator.apply(Position.fromIndex(i, boardSize)));
+        for (int i = 0; i < boardSize.kolommen() * boardSize.rijen(); i++) {
+            Position position = Position.fromIndex(i, boardSize);
+            E cell = cellCreator.apply(position);
+
+            replaceCellAt(position, cell);
         }
     }
 
@@ -39,8 +48,8 @@ public class Board<E> {
         if(!(boardSize.equals(otherBoard.getBoardSize()))){
             throw new RuntimeException("Boards not same size");
         }
-        for (int i = 0; i <boardSize.kolommen() *  boardSize.rijen(); i++){
-            otherBoard.cells.add(cells.get(i));
+        for (Position position : cells.keySet()){
+            otherBoard.replaceCellAt(position, this.cells.get(position));
         }
     }
 
