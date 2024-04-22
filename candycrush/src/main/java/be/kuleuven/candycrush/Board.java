@@ -18,12 +18,8 @@ public class Board<E> {
     }
 
     // TODO: MAKE MAPPY
-    public Iterator<E> getCells(){
-        ArrayList<E> list = new ArrayList<>();
-        for (Position position : cells.keySet()){
-            list.add(cells.get(position));
-        }
-        return list.iterator();
+    public Map<Position, E> getCells(){
+        return cells;
     }
 
     public E getCellAt(Position position){

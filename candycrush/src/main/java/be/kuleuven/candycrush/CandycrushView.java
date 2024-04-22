@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.util.Iterator;
+import java.util.Map;
 
 public class CandycrushView extends Region {
     private CandycrushModel model;
@@ -31,28 +32,15 @@ public class CandycrushView extends Region {
     }
 
     public void grid(){
-        int i = 0;
-        int height = 0;
-        Iterator<Candy> iter = model.getSpeelbord().getCells();
-
-        while(iter.hasNext()) {
-            Candy candy = iter.next();
-
-            Rectangle rectangle = new Rectangle(i * widthCandy, height * heigthCandy, widthCandy,heigthCandy);
+        Map<Position, Candy> cells = model.getSpeelbord().getCells();
+        BoardSize size = model.getBoardSize();
+        for (Position position : cells.keySet()){
+            Rectangle rectangle = new Rectangle(position.kolom() * widthCandy, position.rij() * heigthCandy, widthCandy,heigthCandy);
             rectangle.setFill(Color.TRANSPARENT);
             rectangle.setStroke(Color.BLACK);
 
-            Position position = new Position(height, i, model.getBoardSize());
-            Node node = makeCandyShape(position, candy);
-
+            Node node = makeCandyShape(position, model.getSpeelbord().getCellAt(position));
             getChildren().addAll(rectangle,node);
-
-            if (i == model.getWidth() - 1) {
-                i = 0;
-                height++;
-            } else {
-                i++;
-            }
         }
     }
 
