@@ -53,4 +53,5 @@ public record Position(int rij, int kolom, BoardSize boardSize) {
     public boolean isLastColumn(){
         return kolom == boardSize().kolommen() - 1;
     }
+
 }
