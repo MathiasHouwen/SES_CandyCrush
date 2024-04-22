@@ -101,6 +101,7 @@ public class CandycrushModel {
                 result.add(neighbor);
             }
         }
+
         return result;
     }
 }

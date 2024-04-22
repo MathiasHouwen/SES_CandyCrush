@@ -22,6 +22,7 @@ public class BoardTest {
 
         assertNotNull(board);
     }
+
     @Test
     public void testDatBoardKopierd(){
         BoardSize size = new BoardSize(3,3);
@@ -33,5 +34,19 @@ public class BoardTest {
 
         board.copyTo(otherBoard);
         assert board.equals(otherBoard);
+    }
+
+    @Test
+    public void GetRightCellUsingPosition(){
+        BoardSize size = new BoardSize(3,3);
+        Board<Integer> board = new Board<>(size);
+
+        Function<Position, Integer> IntegerCreator = position -> position.rij() + position.kolom();
+        board.fill(IntegerCreator);
+
+        Position position = new Position(1,1,size);
+        int cell = board.getCellAt(position);
+
+        assert cell == 2;
     }
 }
