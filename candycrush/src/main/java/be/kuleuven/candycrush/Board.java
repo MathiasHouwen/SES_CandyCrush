@@ -1,6 +1,7 @@
 package be.kuleuven.candycrush;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 public class Board<E> {
     private Map<Position, E> cells;
@@ -9,24 +10,23 @@ public class Board<E> {
 
     public Board(BoardSize boardSize) {
         this.boardSize = boardSize;
-        this.cells = new HashMap<>();
-        this.positions = new HashMap<>();
+        this.cells = new ConcurrentHashMap<>();
+        this.positions = new ConcurrentHashMap<>();
     }
 
     public BoardSize getBoardSize() {
         return boardSize;
     }
 
-    // TODO: MAKE MAPPY
     public Map<Position, E> getCells(){
-        return cells;
+        return Collections.unmodifiableMap(cells);
     }
 
-    public E getCellAt(Position position){
+    public synchronized E getCellAt(Position position){
         return cells.get(position);
     }
 
-    public void replaceCellAt(Position position, E newCell){
+    public synchronized void replaceCellAt(Position position, E newCell){
         cells.put(position, newCell);
         positions.put(newCell, position);
     }
@@ -60,7 +60,7 @@ public class Board<E> {
     }
 
     @Override // Deze methode is gegenegeerd door Intellij
-    public boolean equals(Object o) {
+    public synchronized boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Board<?> board = (Board<?>) o;
