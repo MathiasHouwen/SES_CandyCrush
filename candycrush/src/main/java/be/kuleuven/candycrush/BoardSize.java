@@ -1,6 +1,7 @@
 package be.kuleuven.candycrush;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public record BoardSize(int rijen, int kolommen) {
     public BoardSize {
@@ -8,7 +9,7 @@ public record BoardSize(int rijen, int kolommen) {
         if (kolommen <= 0) throw new IllegalArgumentException("kolommen moet meer dan 0 zijn");
     }
 
-    public Iterable<Position> positions(){
+    public Collection<Position> positions(){
         ArrayList<Position> result = new ArrayList<>();
         BoardSize size = new BoardSize(rijen, kolommen);
         for(int i = 0; i < rijen*kolommen; i++){

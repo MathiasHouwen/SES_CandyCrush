@@ -131,7 +131,7 @@ public class CandycrushModelTests {
 
     @Test
     public void neighborPositions_alsRechtseOnderHoek(){
-        BoardSize size = new BoardSize(4, 3);
+        BoardSize size = new BoardSize(3, 3);
         Position linkseHoek = new Position(3, 2, size);
         ArrayList<Position> neighbors = (ArrayList<Position>) linkseHoek.neighborPositions();
         ArrayList<Position> test = new ArrayList<>();

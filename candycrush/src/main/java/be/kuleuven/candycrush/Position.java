@@ -1,6 +1,8 @@
 package be.kuleuven.candycrush;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 public record Position(int rij, int kolom, BoardSize boardSize) {
     public Position {
@@ -52,5 +54,28 @@ public record Position(int rij, int kolom, BoardSize boardSize) {
 
     public boolean isLastColumn(){
         return kolom == boardSize().kolommen() - 1;
+    }
+
+    public Stream<Position> walkLeft(){
+        return this.boardSize.positions().stream()
+                .filter(p -> p.rij() == this.rij())
+                .filter(p -> p.kolom() > this.kolom())
+                .sorted(Comparator.comparingInt(Position::rij));
+    }
+    public Stream<Position> walkRight(){
+        return this.boardSize.positions().stream()
+                .filter(p -> p.rij() == this.rij())
+                .filter(p -> p.kolom() < this.kolom())
+                .sorted(Comparator.comparingInt(Position::rij).reversed()); //TODO : OMKEREN??
+    }
+    public Stream<Position> walkUp(){
+        return this.boardSize.positions().stream()
+                .filter(p -> p.kolom() == this.kolom())
+                .filter(p -> p.rij() > this.rij());
+    }
+    public Stream<Position> walkDown(){
+        return this.boardSize.positions().stream()
+                .filter(p -> p.kolom() == this.kolom())
+                .filter(p -> p.rij() < this.rij());
     }
 }

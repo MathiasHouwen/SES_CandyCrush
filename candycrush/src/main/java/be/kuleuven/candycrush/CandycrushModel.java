@@ -3,6 +3,7 @@ package be.kuleuven.candycrush;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 public class CandycrushModel {
     private String speler;
@@ -103,4 +104,5 @@ public class CandycrushModel {
 
         return result;
     }
+
 }
