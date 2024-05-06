@@ -128,6 +128,20 @@ public class CandycrushModel {
                 });
     }
 
+    List<Position> longestMatchToRight(Position pos){
+        Stream<Position> walked = pos.walkRight();
+        return walked
+                .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos)))
+                .toList();
+    }
+
+    List<Position> longestMatchDown(Position pos){
+        Stream<Position> walked = pos.walkDown();
+        return walked
+                .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos)))
+                .toList();
+    }
+
     public static void main(String[] args) {
         CandycrushModel model = new CandycrushModel("Speler", 3, 3);
         Board<Candy> board = model.getSpeelbord();
