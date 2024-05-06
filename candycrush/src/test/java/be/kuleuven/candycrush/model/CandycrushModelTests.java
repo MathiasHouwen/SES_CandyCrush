@@ -1,12 +1,11 @@
 package be.kuleuven.candycrush.model;
 
-import be.kuleuven.candycrush.Board;
-import be.kuleuven.candycrush.BoardSize;
-import be.kuleuven.candycrush.CandycrushModel;
-import be.kuleuven.candycrush.Position;
+import be.kuleuven.candycrush.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Map;
+import be.kuleuven.candycrush.Candy;
 
 import static be.kuleuven.CheckNeighboursInGrid.getSameNeighboursIds;
 
