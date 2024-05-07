@@ -3,7 +3,9 @@ package be.kuleuven.candycrush;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CandycrushModel {
@@ -106,13 +108,13 @@ public class CandycrushModel {
         return result;
     }
 
-    boolean firstTwoHaveCandy(Candy candy, Stream<Position> positions){
+    public boolean firstTwoHaveCandy(Candy candy, Stream<Position> positions){
         return positions
                 .limit(2)
                 .allMatch(p -> candyBoard.getCellAt(p).equals(candy));
     }
 
-    Stream<Position> horizontalStartingPositions(){
+    public Stream<Position> horizontalStartingPositions(){
         return boardSize.positions().stream()
                 .filter(p -> {
                     Stream<Position> buren = p.walkLeft();
@@ -120,7 +122,7 @@ public class CandycrushModel {
                 });
     }
 
-    Stream<Position> verticalStartingPositions(){
+    public Stream<Position> verticalStartingPositions(){
         return boardSize.positions().stream()
                 .filter(p -> {
                     Stream<Position> buren = p.walkUp();
@@ -128,20 +130,32 @@ public class CandycrushModel {
                 });
     }
 
-    List<Position> longestMatchToRight(Position pos){
+    public List<Position> longestMatchToRight(Position pos){
         Stream<Position> walked = pos.walkRight();
         return walked
-                .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos)))
+                .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos))
+                            && getSpeelbord().getCellAt(p) != null && getSpeelbord().getCellAt(pos) != null)
                 .toList();
     }
 
-    List<Position> longestMatchDown(Position pos){
+    public List<Position> longestMatchDown(Position pos){
         Stream<Position> walked = pos.walkDown();
         return walked
-                .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos)))
+                .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos))
+                        && getSpeelbord().getCellAt(p) != null && getSpeelbord().getCellAt(pos) != null)
                 .toList();
     }
 
+    public Set<List<Position>> findAllMatches(){
+        Stream<List<Position>> horizontalMatches = horizontalStartingPositions()
+                .map(this::longestMatchToRight);
+
+        Stream<List<Position>> verticalMatches = verticalStartingPositions()
+                .map(this::longestMatchDown);
+
+        return Stream.concat(horizontalMatches, verticalMatches)
+                .collect(Collectors.toSet());
+    }
     public static void main(String[] args) {
         CandycrushModel model = new CandycrushModel("Speler", 3, 3);
         Board<Candy> board = model.getSpeelbord();

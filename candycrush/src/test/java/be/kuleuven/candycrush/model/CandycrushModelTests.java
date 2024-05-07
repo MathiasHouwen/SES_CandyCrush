@@ -5,9 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.stream.Stream;
+
 import be.kuleuven.candycrush.Candy;
 
 import static be.kuleuven.CheckNeighboursInGrid.getSameNeighboursIds;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CandycrushModelTests {
     // gegeven_wanneer_dan
