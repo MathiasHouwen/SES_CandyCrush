@@ -1,9 +1,6 @@
 package be.kuleuven.candycrush;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -147,14 +144,22 @@ public class CandycrushModel {
     }
 
     public Set<List<Position>> findAllMatches(){
-        Stream<List<Position>> horizontalMatches = horizontalStartingPositions()
-                .map(this::longestMatchToRight);
+        List<List<Position>> matches = Stream.concat(horizontalStartingPositions(), verticalStartingPositions())
+                .flatMap(p -> {
+                    List<Position> horizontalMatch = longestMatchToRight(p);
+                    List<Position> verticalMatch = longestMatchDown(p);
+                    return Stream.of(horizontalMatch, verticalMatch);
+                })
+                .filter(m -> m.size() > 2)
+                .sorted((match1, match2) -> match2.size() - match1.size())
+                .toList();
 
-        Stream<List<Position>> verticalMatches = verticalStartingPositions()
-                .map(this::longestMatchDown);
-
-        return Stream.concat(horizontalMatches, verticalMatches)
+        return matches.stream()
+                .filter(match -> matches.stream()
+                        .noneMatch(longerMatch -> longerMatch.size() > match.size() && new HashSet<>(longerMatch).containsAll(match)))
                 .collect(Collectors.toSet());
+
+
     }
     public static void main(String[] args) {
         CandycrushModel model = new CandycrushModel("Speler", 3, 3);
