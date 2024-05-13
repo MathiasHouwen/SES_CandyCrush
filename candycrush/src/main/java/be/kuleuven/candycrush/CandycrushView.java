@@ -64,6 +64,7 @@ public class CandycrushView extends Region {
             case Erwt ignored -> makeRec(position, Color.YELLOW);
             case Kropsla ignored -> makeRec(position, Color.BLACK);
             case NormalCandy c -> makeNormalCandy(position, c);
+            case noCandy ignored -> makeCirc(position, Color.TRANSPARENT);
 
             default -> throw new IllegalStateException("Unexpected value: " + candy);
         };

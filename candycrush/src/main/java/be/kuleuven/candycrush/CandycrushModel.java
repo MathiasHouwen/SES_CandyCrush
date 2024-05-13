@@ -64,6 +64,9 @@ public class CandycrushModel {
     public void reset(){
         this.score =0;
         this.gestart = false;
+
+        Function<Position, Candy> candyCreator = position -> randomCandy();
+        candyBoard.fill(candyCreator);
     }
 
     public Candy randomCandy(){
@@ -82,12 +85,16 @@ public class CandycrushModel {
     public void candyWithIndexSelected(Position position){
         Iterable<Position> Neighbours = getSameNeighbourPositions(position);
 
-        for(Position Neighbour : Neighbours){
+        /*for(Position Neighbour : Neighbours){
             candyBoard.replaceCellAt(Neighbour, randomCandy());
             score = score + 2;
         }
         candyBoard.replaceCellAt(position, randomCandy());
-        score++;
+        score++;*/
+
+        candyBoard.replaceCellAt(position, new noCandy());
+        System.out.println("hier1");
+        updateBoard();
     }
 
     Iterable<Position> getSameNeighbourPositions(Position position){
@@ -131,7 +138,7 @@ public class CandycrushModel {
         Stream<Position> walked = pos.walkRight();
         return walked
                 .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos))
-                            && getSpeelbord().getCellAt(p) != null && getSpeelbord().getCellAt(pos) != null)
+                            && !(getSpeelbord().getCellAt(p) instanceof noCandy) && !(getSpeelbord().getCellAt(pos) instanceof noCandy))
                 .toList();
     }
 
@@ -139,12 +146,12 @@ public class CandycrushModel {
         Stream<Position> walked = pos.walkDown();
         return walked
                 .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos))
-                        && getSpeelbord().getCellAt(p) != null && getSpeelbord().getCellAt(pos) != null)
+                        && !(getSpeelbord().getCellAt(p) instanceof noCandy) && !(getSpeelbord().getCellAt(pos) instanceof noCandy))
                 .toList();
     }
 
     public Set<List<Position>> findAllMatches(){
-        List<List<Position>> matches = Stream.concat(horizontalStartingPositions(), verticalStartingPositions())
+        List<List<Position>> allMatches = Stream.concat(horizontalStartingPositions(), verticalStartingPositions())
                 .flatMap(p -> {
                     List<Position> horizontalMatch = longestMatchToRight(p);
                     List<Position> verticalMatch = longestMatchDown(p);
@@ -153,45 +160,62 @@ public class CandycrushModel {
                 .filter(m -> m.size() > 2)
                 .sorted((match1, match2) -> match2.size() - match1.size())
                 .toList();
+        System.out.println(allMatches);
 
-        return matches.stream()
-                .filter(match -> matches.stream()
+        return allMatches.stream()
+                .filter(match -> allMatches.stream()
                         .noneMatch(longerMatch -> longerMatch.size() > match.size() && new HashSet<>(longerMatch).containsAll(match)))
                 .collect(Collectors.toSet());
     }
 
     public void clearMatch(List<Position> match){
-        if(match.isEmpty()) return;
-        Position first = match.getFirst();
-        candyBoard.replaceCellAt(first, null); // ZOU NULL WERKEN OF HEEFT DEZE EEN EMPTY CANDY TYPE NODIG??
-        match.removeFirst();
-        clearMatch(match);
+        List<Position> copy = new ArrayList<>(match);
+
+        if(copy.isEmpty()) return;
+        Position first = copy.getFirst();
+        candyBoard.replaceCellAt(first, new noCandy()); // ZOU NULL WERKEN OF HEEFT DEZE EEN EMPTY CANDY TYPE NODIG??
+        System.out.println(copy);
+        copy.removeFirst();
+        clearMatch(copy);
+    }
+
+    public void fallDownto(List<Position> match){
+        if(horizontalMatch(match)){
+            match.forEach(this::fallDownTo);
+        } else {
+            match.stream()
+                    .min(Comparator.comparingInt(Position::rij)).ifPresent(this::fallDownTo);
+        }
     }
 
     public void fallDownTo(Position pos){
-        // ALS CUR POS EEN CANDY IS KAN DIE NIET VALLEN
-        // -> DUS GA NAAR VOLGENDE
-        // ALS POS GEEN CANDY HEEFT DAN KAN DE BOVENSTE VALLEN
-        // -> WISSEL CUR POS MET DE POSITIE ER BOVEN
-        // -> BLIJF DAT DOEN TOT HET EEN CANDY HEEFT
-
-        // RETURN ALS U BOVENSTE POS EEN RIJ = 0 HEEFT
-        // RETURN ALS ER EEN TIME OUT IS, gaat met return 1??
         try{
             Position boven = new Position(pos.rij() - 1, pos.kolom(), boardSize);
-            if(candyBoard.getCellAt(pos) == null){
+            if(candyBoard.getCellAt(pos) instanceof noCandy){
                 candyBoard.replaceCellAt(pos, candyBoard.getCellAt(boven));
                 fallDownTo(boven);
-
-                // ALS DE CELL WAAR DIE ME VERPLAATS != NULL IS DO BOVENSTE
-                // ANDERS IDK
-
             } else{
                 fallDownTo(boven);
             }
         } catch (IllegalArgumentException ignored){
             return;
         }
+    }
+
+    public boolean horizontalMatch(List<Position> match){
+        return match.getFirst().rij() == match.getLast().rij();
+    }
+
+    public boolean updateBoard(){
+        Set<List<Position>> matches = findAllMatches();
+        System.out.println("HELPPP");
+        System.out.println(horizontalStartingPositions().toList());
+        if (matches.isEmpty()) return false;
+
+        for(List<Position> match : matches){
+            System.out.println(match);
+        }
+        return true;
     }
 
     public static void main(String[] args) {

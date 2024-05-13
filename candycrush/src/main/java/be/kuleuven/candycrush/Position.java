@@ -59,25 +59,25 @@ public record Position(int rij, int kolom, BoardSize boardSize) {
     public Stream<Position> walkLeft(){
         return this.boardSize.positions().stream()
                 .filter(p -> p.rij() == this.rij())
-                .filter(p -> p.kolom() < this.kolom())
+                .filter(p -> p.kolom() <= this.kolom())
                 .sorted(Comparator.comparingInt(Position::kolom).reversed());
     }
     public Stream<Position> walkRight(){
         return this.boardSize.positions().stream()
                 .filter(p -> p.rij() == this.rij())
-                .filter(p -> p.kolom() > this.kolom())
+                .filter(p -> p.kolom() >= this.kolom())
                 .sorted(Comparator.comparingInt(Position::kolom));
     }
     public Stream<Position> walkUp(){
         return this.boardSize.positions().stream()
                 .filter(p -> p.kolom() == this.kolom())
-                .filter(p -> p.rij() < this.rij())
+                .filter(p -> p.rij() <= this.rij())
                 .sorted(Comparator.comparingInt(Position::rij).reversed());
     }
     public Stream<Position> walkDown(){
         return this.boardSize.positions().stream()
                 .filter(p -> p.kolom() == this.kolom())
-                .filter(p -> p.rij() > this.rij())
+                .filter(p -> p.rij() >= this.rij())
                 .sorted(Comparator.comparingInt(Position::rij));
     }
 }
