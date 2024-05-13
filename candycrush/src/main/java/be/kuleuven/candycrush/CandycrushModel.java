@@ -93,6 +93,7 @@ public class CandycrushModel {
         score++;*/
 
         candyBoard.replaceCellAt(position, new noCandy());
+        fallDownTo(position);
         System.out.println("hier1");
         updateBoard();
     }
@@ -160,7 +161,6 @@ public class CandycrushModel {
                 .filter(m -> m.size() > 2)
                 .sorted((match1, match2) -> match2.size() - match1.size())
                 .toList();
-        System.out.println(allMatches);
 
         return allMatches.stream()
                 .filter(match -> allMatches.stream()
@@ -169,17 +169,17 @@ public class CandycrushModel {
     }
 
     public void clearMatch(List<Position> match){
-        List<Position> copy = new ArrayList<>(match);
+        List<Position> copy = new ArrayList<>(match); // Match is immutable dus maak een copy
 
         if(copy.isEmpty()) return;
         Position first = copy.getFirst();
-        candyBoard.replaceCellAt(first, new noCandy()); // ZOU NULL WERKEN OF HEEFT DEZE EEN EMPTY CANDY TYPE NODIG??
+        candyBoard.replaceCellAt(first, new noCandy());
         System.out.println(copy);
         copy.removeFirst();
         clearMatch(copy);
     }
 
-    public void fallDownto(List<Position> match){
+    public void fallDownTo(List<Position> match){
         if(horizontalMatch(match)){
             match.forEach(this::fallDownTo);
         } else {
@@ -188,11 +188,13 @@ public class CandycrushModel {
         }
     }
 
+    //TODO: GROOTER GATEN HIHI
     public void fallDownTo(Position pos){
         try{
             Position boven = new Position(pos.rij() - 1, pos.kolom(), boardSize);
             if(candyBoard.getCellAt(pos) instanceof noCandy){
                 candyBoard.replaceCellAt(pos, candyBoard.getCellAt(boven));
+                candyBoard.replaceCellAt(boven, new noCandy());
                 fallDownTo(boven);
             } else{
                 fallDownTo(boven);
@@ -208,13 +210,14 @@ public class CandycrushModel {
 
     public boolean updateBoard(){
         Set<List<Position>> matches = findAllMatches();
-        System.out.println("HELPPP");
-        System.out.println(horizontalStartingPositions().toList());
         if (matches.isEmpty()) return false;
 
         for(List<Position> match : matches){
-            System.out.println(match);
+            clearMatch(match);
+            fallDownTo(match);
         }
+
+        updateBoard();
         return true;
     }
 
