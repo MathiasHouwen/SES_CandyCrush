@@ -158,9 +158,42 @@ public class CandycrushModel {
                 .filter(match -> matches.stream()
                         .noneMatch(longerMatch -> longerMatch.size() > match.size() && new HashSet<>(longerMatch).containsAll(match)))
                 .collect(Collectors.toSet());
-
-
     }
+
+    public void clearMatch(List<Position> match){
+        if(match.isEmpty()) return;
+        Position first = match.getFirst();
+        candyBoard.replaceCellAt(first, null); // ZOU NULL WERKEN OF HEEFT DEZE EEN EMPTY CANDY TYPE NODIG??
+        match.removeFirst();
+        clearMatch(match);
+    }
+
+    public void fallDownTo(Position pos){
+        // ALS CUR POS EEN CANDY IS KAN DIE NIET VALLEN
+        // -> DUS GA NAAR VOLGENDE
+        // ALS POS GEEN CANDY HEEFT DAN KAN DE BOVENSTE VALLEN
+        // -> WISSEL CUR POS MET DE POSITIE ER BOVEN
+        // -> BLIJF DAT DOEN TOT HET EEN CANDY HEEFT
+
+        // RETURN ALS U BOVENSTE POS EEN RIJ = 0 HEEFT
+        // RETURN ALS ER EEN TIME OUT IS, gaat met return 1??
+        try{
+            Position boven = new Position(pos.rij() - 1, pos.kolom(), boardSize);
+            if(candyBoard.getCellAt(pos) == null){
+                candyBoard.replaceCellAt(pos, candyBoard.getCellAt(boven));
+                fallDownTo(boven);
+
+                // ALS DE CELL WAAR DIE ME VERPLAATS != NULL IS DO BOVENSTE
+                // ANDERS IDK
+
+            } else{
+                fallDownTo(boven);
+            }
+        } catch (IllegalArgumentException ignored){
+            return;
+        }
+    }
+
     public static void main(String[] args) {
         CandycrushModel model = new CandycrushModel("Speler", 3, 3);
         Board<Candy> board = model.getSpeelbord();
