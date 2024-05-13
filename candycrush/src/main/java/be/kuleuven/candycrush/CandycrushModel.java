@@ -184,7 +184,7 @@ public class CandycrushModel {
             match.forEach(this::fallDownTo);
         } else {
             match.stream()
-                    .min(Comparator.comparingInt(Position::rij)).ifPresent(this::fallDownTo);
+                    .max(Comparator.comparingInt(Position::rij)).ifPresent(this::fallDownTo);
         }
     }
 
@@ -193,9 +193,12 @@ public class CandycrushModel {
         try{
             Position boven = new Position(pos.rij() - 1, pos.kolom(), boardSize);
             if(candyBoard.getCellAt(pos) instanceof noCandy){
+                while (candyBoard.getCellAt(boven) instanceof noCandy){
+                    boven =  new Position(boven.rij() - 1, boven.kolom(), boardSize);
+                }
                 candyBoard.replaceCellAt(pos, candyBoard.getCellAt(boven));
                 candyBoard.replaceCellAt(boven, new noCandy());
-                fallDownTo(boven);
+                fallDownTo(pos);
             } else{
                 fallDownTo(boven);
             }
