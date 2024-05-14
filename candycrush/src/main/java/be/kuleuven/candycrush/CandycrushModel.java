@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 
 public class CandycrushModel {
     private String speler;
-    // private ArrayList<Candy> speelbord;
     private Board<Candy> candyBoard;
     private int score;
     private boolean gestart;
@@ -93,8 +92,8 @@ public class CandycrushModel {
         score++;*/
 
         candyBoard.replaceCellAt(position, new noCandy());
+        score++;
         fallDownTo(position);
-        System.out.println("hier1");
         updateBoard();
     }
 
@@ -174,8 +173,8 @@ public class CandycrushModel {
         if(copy.isEmpty()) return;
         Position first = copy.getFirst();
         candyBoard.replaceCellAt(first, new noCandy());
-        System.out.println(copy);
         copy.removeFirst();
+        score = score + 2;
         clearMatch(copy);
     }
 
@@ -188,7 +187,6 @@ public class CandycrushModel {
         }
     }
 
-    //TODO: GROOTER GATEN HIHI
     public void fallDownTo(Position pos){
         try{
             Position boven = new Position(pos.rij() - 1, pos.kolom(), boardSize);
@@ -202,9 +200,7 @@ public class CandycrushModel {
             } else{
                 fallDownTo(boven);
             }
-        } catch (IllegalArgumentException ignored){
-            return;
-        }
+        } catch (IllegalArgumentException ignored){return;}
     }
 
     public boolean horizontalMatch(List<Position> match){
