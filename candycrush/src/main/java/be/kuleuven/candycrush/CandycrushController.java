@@ -42,6 +42,7 @@ public class CandycrushController {
     private CandycrushModel model;
     private CandycrushView view;
     @FXML
+
     void initialize() {
         assert Label != null : "fx:id=\"Label\" was not injected: check your FXML file 'candycrush-view.fxml'.";
         assert btn != null : "fx:id=\"btn\" was not injected: check your FXML file 'candycrush-view.fxml'.";
@@ -49,7 +50,29 @@ public class CandycrushController {
         assert speelbord != null : "fx:id=\"speelbord\" was not injected: check your FXML file 'candycrush-view.fxml'.";
         assert textInput != null : "fx:id=\"textInput\" was not injected: check your FXML file 'candycrush-view.fxml'.";
         assert scoreBoard != null : "fx:id=\"scoreBoard\"was not injected: check your FXML file 'candycrush-view.fxml'.";
-        model = new CandycrushModel("Test");
+
+        CandycrushModel model1 = createBoardFromString("""
+                                                               @@o#
+                                                               o*#o
+                                                               @@**
+                                                               *#@@""");
+
+        CandycrushModel model2 = createBoardFromString("""
+                                                               #oo##
+                                                               #@o@@
+                                                               *##o@
+                                                               @@*@o
+                                                               **#*o""");
+
+        CandycrushModel model3 = createBoardFromString("""
+                                                               #@#oo@
+                                                               @**@**
+                                                               o##@#o
+                                                               @#oo#@
+                                                               @*@**@
+                                                               *#@##*""");
+
+        model = model2;
         view = new CandycrushView(model);
         speelbord.getChildren().add(view);
         view.setOnMouseClicked(this::onCandyClicked);
@@ -90,6 +113,30 @@ public class CandycrushController {
         reset.setDisable(true);
         paneel.setStyle("-fx-background-color: white");
         update();
+    }
+
+    public static CandycrushModel createBoardFromString(String configuration) {
+        var lines = configuration.toLowerCase().lines().toList();
+        BoardSize size = new BoardSize(lines.size(), lines.getFirst().length());
+        var model = new CandycrushModel("Speler", size.rijen(), size.kolommen());
+        for (int row = 0; row < lines.size(); row++) {
+            var line = lines.get(row);
+            for (int col = 0; col < line.length(); col++) {
+                model.getSpeelbord().replaceCellAt(new Position(row, col, size), characterToCandy(line.charAt(col)));
+            }
+        }
+        return model;
+    }
+
+    private static Candy characterToCandy(char c) {
+        return switch(c) {
+            case '.' -> null;
+            case 'o' -> new NormalCandy(0);
+            case '*' -> new NormalCandy(1);
+            case '#' -> new NormalCandy(2);
+            case '@' -> new NormalCandy(3);
+            default -> throw new IllegalArgumentException("Unexpected value: " + c);
+        };
     }
 
 }

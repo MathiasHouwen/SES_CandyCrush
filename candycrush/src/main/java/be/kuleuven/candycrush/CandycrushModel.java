@@ -219,12 +219,4 @@ public class CandycrushModel {
         updateBoard();
         return true;
     }
-
-    public static void main(String[] args) {
-        CandycrushModel model = new CandycrushModel("Speler", 3, 3);
-        Board<Candy> board = model.getSpeelbord();
-
-        List<Position> positionStream = model.horizontalStartingPositions().toList();
-        int a = 0;
-    }
 }
