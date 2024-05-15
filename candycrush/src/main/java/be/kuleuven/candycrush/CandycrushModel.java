@@ -273,6 +273,11 @@ public class CandycrushModel {
         }
         return swaps;
     }
+    private int calculateScore(Board<Candy> board){
+        return (int) boardSize.positions().stream()
+                .filter(p-> board.getCellAt(p) instanceof noCandy)
+                .count();
+    }
 
     public Solution solve(){
         Solution intialSolution = new Solution(0,candyBoard);
@@ -294,7 +299,7 @@ public class CandycrushModel {
             Board<Candy> mutableBoard = new Board<>(partialSolution.board().getBoardSize());
             partialSolution.board().copyTo(mutableBoard);
 
-            swapCandies(swap.getFirst(), swap.getLast(), partialSolution.board());
+            swapCandies(swap.getFirst(), swap.getLast());
             int score = calculateScore(mutableBoard);
             return findAnySolution(new Solution(score, mutableBoard));
         }
