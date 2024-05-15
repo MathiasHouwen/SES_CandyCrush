@@ -9,4 +9,13 @@ public record Solution(int score, Board<Candy> board) {
         System.out.println(score);
         board.printBoard();
     }
+
+    public int calculateScore(){
+        /*return (int) boardSize.positions().stream()
+                .filter(p-> board.getCellAt(p) instanceof noCandy)
+                .count();*/
+        return (int) board.getCells().values().stream()
+                .filter(c -> c instanceof noCandy)
+                .count();
+    }
 }

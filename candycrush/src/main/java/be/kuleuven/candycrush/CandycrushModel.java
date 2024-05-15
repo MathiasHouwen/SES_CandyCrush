@@ -273,9 +273,13 @@ public class CandycrushModel {
         }
         return swaps;
     }
+
     private int calculateScore(Board<Candy> board){
-        return (int) boardSize.positions().stream()
+        /*return (int) boardSize.positions().stream()
                 .filter(p-> board.getCellAt(p) instanceof noCandy)
+                .count();*/
+        return (int) board.getCells().values().stream()
+                .filter(c -> c instanceof noCandy)
                 .count();
     }
 
@@ -300,50 +304,9 @@ public class CandycrushModel {
             partialSolution.board().copyTo(mutableBoard);
 
             swapCandies(swap.getFirst(), swap.getLast());
-            int score = calculateScore(mutableBoard);
+            int score = this.getScore();
             return findAnySolution(new Solution(score, mutableBoard));
         }
         return null;
     }
-    /*public Solution solve() {
-        PartialSolution initial = createInitialSolution();
-        return findAnySolution(initial);
-    }
-
-    private Solution findAnySolution(PartialSolution current) {
-        if (current.isComplete()) return current.toSolution();
-        if (current.shouldAbort()) return null;
-        for (var extension : current.extensions()) {
-            extension.apply(current);
-            var solution = findAnySolution(current);
-            if (solution != null) {
-                return solution;
-            } else {
-                extension.undo(current);
-            }
-        }
-        return null;
-    }
-    public static List<String> findAny(String string, List<String> tokens) {
-    return findAny(string, tokens, new ArrayList<>());
-    }
-
-    private static List<String> findAny(String remainingString, List<String> allTokens, List<String> usedTokens) {
-        if (remainingString.isEmpty()) return usedTokens;
-        // if (allTokens.stream().noneMatch(remainingString::startsWith)) return null; // overbodig
-        for (String tok : allTokens) {
-            if (remainingString.startsWith(tok)) {
-                usedTokens.add(tok);
-                var shorterString = remainingString.substring(tok.length());
-                var solution = findAny(shorterString, allTokens, usedTokens);
-                if (solution != null) {
-                    return solution;
-                } else {
-                    usedTokens.removeLast();
-                }
-            }
-        }
-        return null;
-    }
-    */
 }
