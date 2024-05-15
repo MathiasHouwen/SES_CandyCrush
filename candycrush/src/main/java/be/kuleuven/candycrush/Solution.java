@@ -20,11 +20,15 @@ public record Solution(int score, Board<Candy> board, List<List<Position>> moves
     }
 
     public int calculateScore(){
-        /*return (int) boardSize.positions().stream()
-                .filter(p-> board.getCellAt(p) instanceof noCandy)
-                .count();*/
         return (int) board.getCells().values().stream()
                 .filter(c -> c instanceof noCandy)
                 .count();
+    }
+
+    public boolean isBetterThan(Solution bestSoFar) {
+        if(score > bestSoFar.score()){
+            return true;
+        }
+        return moves.size() > bestSoFar.moves().size();
     }
 }

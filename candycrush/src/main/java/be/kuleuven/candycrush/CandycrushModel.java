@@ -277,16 +277,43 @@ public class CandycrushModel {
         }
         return swaps;
     }
+    public Solution maximizeScore(){
+        List<List<Position>> moves = new ArrayList<>();
+        Solution intialSolution = new Solution(0,candyBoard, moves);
 
-    private int calculateScore(Board<Candy> board){
-        /*return (int) boardSize.positions().stream()
-                .filter(p-> board.getCellAt(p) instanceof noCandy)
-                .count();*/
-        return (int) board.getCells().values().stream()
-                .filter(c -> c instanceof noCandy)
-                .count();
+        return findOptimalSolution(intialSolution, null);
     }
+    private Solution findOptimalSolution(Solution partialSolution, Solution bestSoFar){
+        Set<List<Position>> swaps = getAllSwaps(partialSolution.board());
 
+        if(swaps.isEmpty()){
+            if (bestSoFar == null || partialSolution.isBetterThan(bestSoFar)) {
+                return partialSolution;
+            } else {
+                return bestSoFar;
+            }
+        }
+
+        if(bestSoFar != null && bestSoFar.isBetterThan(partialSolution)){
+            return bestSoFar;
+        }
+
+        for(List<Position> swap : swaps){
+            Board<Candy> mutableBoard = new Board<>(partialSolution.board().getBoardSize());
+            partialSolution.board().copyTo(mutableBoard);
+
+            swapCandies(swap.getFirst(), swap.getLast(), mutableBoard);
+
+            List<List<Position>> newMoves = new ArrayList<>(partialSolution.moves());
+            newMoves.add(swap);
+
+            Solution newSolution = new Solution(0, mutableBoard, newMoves);
+            int score = newSolution.calculateScore();
+            bestSoFar = findOptimalSolution(new Solution(score, mutableBoard, newMoves), bestSoFar);
+        }
+
+        return bestSoFar;
+    }
     public Collection<Solution> solveAll(){
         List<List<Position>> moves = new ArrayList<>();
         Solution intialSolution = new Solution(0,candyBoard, moves);
