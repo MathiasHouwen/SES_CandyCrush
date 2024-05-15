@@ -59,6 +59,18 @@ public class Board<E> {
         return Collections.unmodifiableList(list);
     }
 
+    public void printBoard() {
+        for (int row = 0; row < boardSize.rijen(); row++) {
+            for (int col = 0; col < boardSize.kolommen(); col++) {
+                Position position = new Position(row, col, boardSize);
+                E cell = getCellAt(position);
+                System.out.print(cell != null ? cell.toString() : " ");
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
+    }
+
     @Override // Deze methode is gegenegeerd door Intellij
     public synchronized boolean equals(Object o) {
         if (this == o) return true;
