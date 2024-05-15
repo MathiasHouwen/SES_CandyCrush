@@ -73,7 +73,7 @@ public class CandycrushController {
                                                                @*@**@
                                                                *#@##*""");
 
-        model = model2;
+        model = model3;
         //model = new CandycrushModel("Mathias", 10, 10);
         view = new CandycrushView(model);
         speelbord.getChildren().add(view);
@@ -83,9 +83,9 @@ public class CandycrushController {
         reset.setDisable(true);
 
         //System.out.println(model.solve());
-        Collection<Solution> solution = model.solveAll();
-        int a = 0;
-        //solution.printSolution();
+        Solution solution = model.solveAny();
+        solution.printSolution();
+        model.setCandyBoard(solution.board());
     }
 
     public void update(){

@@ -42,6 +42,10 @@ public class CandycrushModel {
         return candyBoard;
     }
 
+    public void setCandyBoard(Board<Candy> board){
+        candyBoard = board;
+    }
+
     public int getWidth() {
         return boardSize.kolommen();
     }
@@ -95,8 +99,8 @@ public class CandycrushModel {
 
         candyBoard.replaceCellAt(position, new noCandy());
         score++;
-        fallDownTo(position);
-        updateBoard();
+        fallDownTo(position, candyBoard);
+        updateBoard(candyBoard);
         System.out.println(getAllSwaps(candyBoard));
     }
 
@@ -115,49 +119,49 @@ public class CandycrushModel {
         return result;
     }
 
-    public boolean firstTwoHaveCandy(Candy candy, Stream<Position> positions){
+    public boolean firstTwoHaveCandy(Candy candy, Stream<Position> positions, Board<Candy> board){
         return positions
                 .limit(2)
-                .allMatch(p -> candyBoard.getCellAt(p).equals(candy));
+                .allMatch(p -> board.getCellAt(p).equals(candy));
     }
 
-    public Stream<Position> horizontalStartingPositions(){
+    public Stream<Position> horizontalStartingPositions(Board<Candy> board){
         return boardSize.positions().stream()
                 .filter(p -> {
                     Stream<Position> buren = p.walkLeft();
-                    return !firstTwoHaveCandy(candyBoard.getCellAt(p), buren);
+                    return !firstTwoHaveCandy(board.getCellAt(p), buren, board);
                 });
     }
 
-    public Stream<Position> verticalStartingPositions(){
+    public Stream<Position> verticalStartingPositions(Board<Candy> board){
         return boardSize.positions().stream()
                 .filter(p -> {
                     Stream<Position> buren = p.walkUp();
-                    return !firstTwoHaveCandy(candyBoard.getCellAt(p), buren);
+                    return !firstTwoHaveCandy(board.getCellAt(p), buren, board);
                 });
     }
 
-    public List<Position> longestMatchToRight(Position pos){
+    public List<Position> longestMatchToRight(Position pos, Board<Candy> board){
         Stream<Position> walked = pos.walkRight();
         return walked
-                .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos))
-                            && !(getSpeelbord().getCellAt(p) instanceof noCandy) && !(getSpeelbord().getCellAt(pos) instanceof noCandy))
+                .takeWhile(p -> board.getCellAt(p).equals(board.getCellAt(pos))
+                            && !(board.getCellAt(p) instanceof noCandy) && !(board.getCellAt(pos) instanceof noCandy))
                 .toList();
     }
 
-    public List<Position> longestMatchDown(Position pos){
+    public List<Position> longestMatchDown(Position pos, Board<Candy> board){
         Stream<Position> walked = pos.walkDown();
         return walked
-                .takeWhile(p -> getSpeelbord().getCellAt(p).equals(getSpeelbord().getCellAt(pos))
-                        && !(getSpeelbord().getCellAt(p) instanceof noCandy) && !(getSpeelbord().getCellAt(pos) instanceof noCandy))
+                .takeWhile(p -> board.getCellAt(p).equals(board.getCellAt(pos))
+                        && !(board.getCellAt(p) instanceof noCandy) && !(board.getCellAt(pos) instanceof noCandy))
                 .toList();
     }
 
-    public Set<List<Position>> findAllMatches(){
-        List<List<Position>> allMatches = Stream.concat(horizontalStartingPositions(), verticalStartingPositions())
+    public Set<List<Position>> findAllMatches(Board<Candy> board){
+        List<List<Position>> allMatches = Stream.concat(horizontalStartingPositions(board), verticalStartingPositions(board))
                 .flatMap(p -> {
-                    List<Position> horizontalMatch = longestMatchToRight(p);
-                    List<Position> verticalMatch = longestMatchDown(p);
+                    List<Position> horizontalMatch = longestMatchToRight(p, board);
+                    List<Position> verticalMatch = longestMatchDown(p, board);
                     return Stream.of(horizontalMatch, verticalMatch);
                 })
                 .filter(m -> m.size() > 2)
@@ -170,38 +174,38 @@ public class CandycrushModel {
                 .collect(Collectors.toSet());
     }
 
-    public void clearMatch(List<Position> match){
+    public void clearMatch(List<Position> match, Board<Candy> board){
         List<Position> copy = new ArrayList<>(match); // Match is immutable dus maak een copy
 
         if(copy.isEmpty()) return;
         Position first = copy.getFirst();
-        candyBoard.replaceCellAt(first, new noCandy());
+        board.replaceCellAt(first, new noCandy());
         copy.removeFirst();
         score++;
-        clearMatch(copy);
+        clearMatch(copy, board);
     }
 
-    public void fallDownTo(List<Position> match){
+    public void fallDownTo(List<Position> match, Board<Candy> board){
         if(horizontalMatch(match)){
-            match.forEach(this::fallDownTo);
+            match.forEach(position -> fallDownTo(position, board));
         } else {
             match.stream()
-                    .max(Comparator.comparingInt(Position::rij)).ifPresent(this::fallDownTo);
+                    .max(Comparator.comparingInt(Position::rij)).ifPresent(position -> fallDownTo(position, board));
         }
     }
 
-    public void fallDownTo(Position pos){
+    public void fallDownTo(Position pos, Board<Candy> board){
         try{
             Position boven = new Position(pos.rij() - 1, pos.kolom(), boardSize);
-            if(candyBoard.getCellAt(pos) instanceof noCandy){
-                while (candyBoard.getCellAt(boven) instanceof noCandy){
+            if(board.getCellAt(pos) instanceof noCandy){
+                while (board.getCellAt(boven) instanceof noCandy){
                     boven =  new Position(boven.rij() - 1, boven.kolom(), boardSize);
                 }
-                candyBoard.replaceCellAt(pos, candyBoard.getCellAt(boven));
-                candyBoard.replaceCellAt(boven, new noCandy());
-                fallDownTo(pos);
+                board.replaceCellAt(pos, board.getCellAt(boven));
+                board.replaceCellAt(boven, new noCandy());
+                fallDownTo(pos, board);
             } else{
-                fallDownTo(boven);
+                fallDownTo(boven, board);
             }
         } catch (IllegalArgumentException ignored){return;}
     }
@@ -210,52 +214,52 @@ public class CandycrushModel {
         return match.getFirst().rij() == match.getLast().rij();
     }
 
-    public boolean updateBoard(){
-        Set<List<Position>> matches = findAllMatches();
+    public boolean updateBoard(Board<Candy> board){
+        Set<List<Position>> matches = findAllMatches(board);
         if (matches.isEmpty()) return false;
 
         for(List<Position> match : matches){
-            clearMatch(match);
-            fallDownTo(match);
+            clearMatch(match, board);
+            fallDownTo(match, board);
         }
 
-        updateBoard();
+        updateBoard(board);
         return true;
     }
 
-    public void swapCandies(Position pos1, Position pos2){
-        if(!pos1.isNeighbor(pos2) || !matchAfterSwitch(pos1, pos2)){
+    public void swapCandies(Position pos1, Position pos2, Board<Candy> board){
+        if(!pos1.isNeighbor(pos2) || !matchAfterSwitch(pos1, pos2, board)){
             return;
         }
-        if(candyBoard.getCellAt(pos1) instanceof noCandy || candyBoard.getCellAt(pos2) instanceof noCandy){
+        if(board.getCellAt(pos1) instanceof noCandy || board.getCellAt(pos2) instanceof noCandy){
             return;
         }
-        unsafeSwap(pos1, pos2);
-        updateBoard();
+        unsafeSwap(pos1, pos2, board);
+        updateBoard(board);
     }
 
-    private void unsafeSwap(Position pos1, Position pos2){
-        Candy candy1 = candyBoard.getCellAt(pos1);
-        Candy candy2 = candyBoard.getCellAt(pos2);
-        candyBoard.replaceCellAt(pos1, candy2);
-        candyBoard.replaceCellAt(pos2, candy1);
+    private void unsafeSwap(Position pos1, Position pos2, Board<Candy> board){
+        Candy candy1 = board.getCellAt(pos1);
+        Candy candy2 = board.getCellAt(pos2);
+        board.replaceCellAt(pos1, candy2);
+        board.replaceCellAt(pos2, candy1);
     }
 
 
-    public boolean matchAfterSwitch(Position pos1, Position pos2){
-        unsafeSwap(pos1, pos2);
-        Set<List<Position>> matches = findAllMatches();
-        unsafeSwap(pos1, pos2);
+    public boolean matchAfterSwitch(Position pos1, Position pos2, Board<Candy> board){
+        unsafeSwap(pos1, pos2, board);
+        Set<List<Position>> matches = findAllMatches(board);
+        unsafeSwap(pos1, pos2, board);
         return !matches.isEmpty();
     }
 
-    private Set<List<Position>> getAllSwaps(Board board){
+    private Set<List<Position>> getAllSwaps(Board<Candy> board){
         Set<List<Position>> swaps = new HashSet<>();
 
         for (Position position : board.getBoardSize().positions()){
             Iterable<Position> neighbours = position.neighborPositions();
             for(Position neighbour : neighbours){
-                if(!matchAfterSwitch(neighbour, position)){
+                if(!matchAfterSwitch(neighbour, position, board)){
                     continue;
                 }
                 if(board.getCellAt(position) instanceof noCandy || board.getCellAt(neighbour) instanceof noCandy){
@@ -302,10 +306,10 @@ public class CandycrushModel {
             Board<Candy> mutableBoard = new Board<>(partialSolution.board().getBoardSize());
             partialSolution.board().copyTo(mutableBoard);
 
-            swapCandies(swap.getFirst(), swap.getLast());
+            swapCandies(swap.getFirst(), swap.getLast(), mutableBoard);
             int score = this.getScore();
             findAllSolutions(new Solution(score, mutableBoard), solutionsSoFar);
-            swapCandies(swap.getFirst(), swap.getLast());
+            swapCandies(swap.getFirst(), swap.getLast(), mutableBoard);
         }
         return solutionsSoFar;
     }
@@ -330,7 +334,7 @@ public class CandycrushModel {
             Board<Candy> mutableBoard = new Board<>(partialSolution.board().getBoardSize());
             partialSolution.board().copyTo(mutableBoard);
 
-            swapCandies(swap.getFirst(), swap.getLast());
+            swapCandies(swap.getFirst(), swap.getLast(), mutableBoard);
             int score = this.getScore();
             return findAnySolution(new Solution(score, mutableBoard));
         }
