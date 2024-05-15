@@ -1,5 +1,7 @@
 package be.kuleuven.candycrush;
 
+import javafx.util.Pair;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -95,6 +97,7 @@ public class CandycrushModel {
         score++;
         fallDownTo(position);
         updateBoard();
+        System.out.println(getAllSwaps(candyBoard));
     }
 
     Iterable<Position> getSameNeighbourPositions(Position position){
@@ -174,7 +177,7 @@ public class CandycrushModel {
         Position first = copy.getFirst();
         candyBoard.replaceCellAt(first, new noCandy());
         copy.removeFirst();
-        score = score + 2;
+        score++;
         clearMatch(copy);
     }
 
@@ -219,4 +222,101 @@ public class CandycrushModel {
         updateBoard();
         return true;
     }
+
+    public void swapCandies(Position pos1, Position pos2){
+        if(!pos1.isNeighbor(pos2) || !matchAfterSwitch(pos1, pos2)){
+            return;
+        }
+        if(candyBoard.getCellAt(pos1) instanceof noCandy || candyBoard.getCellAt(pos2) instanceof noCandy){
+            return;
+        }
+        unsafeSwap(pos1, pos2);
+        updateBoard();
+    }
+
+    private void unsafeSwap(Position pos1, Position pos2){
+        Candy candy1 = candyBoard.getCellAt(pos1);
+        Candy candy2 = candyBoard.getCellAt(pos2);
+        candyBoard.replaceCellAt(pos1, candy2);
+        candyBoard.replaceCellAt(pos2, candy1);
+    }
+
+
+    public boolean matchAfterSwitch(Position pos1, Position pos2){
+        unsafeSwap(pos1, pos2);
+        Set<List<Position>> matches = findAllMatches();
+        unsafeSwap(pos1, pos2);
+        return !matches.isEmpty();
+    }
+
+    private Set<List<Position>> getAllSwaps(Board board){
+        Set<List<Position>> swaps = new HashSet<>();
+
+        for (Position position : board.getBoardSize().positions()){
+            Iterable<Position> neighbours = position.neighborPositions();
+            for(Position neighbour : neighbours){
+                if(!matchAfterSwitch(neighbour, position)){
+                    continue;
+                }
+                if(board.getCellAt(position) instanceof noCandy || board.getCellAt(neighbour) instanceof noCandy){
+                    continue;
+                }
+                List<Position> swap = Arrays.asList(position, neighbour);
+                // Verwijderd duplicaten in de lijst, want
+                // r1c2-r1c3 == r1c3-r1c2
+                List<Position> reverseSwap = Arrays.asList(neighbour, position);
+                if(swaps.contains(swap) || swaps.contains(reverseSwap)){
+                    continue;
+                }
+                swaps.add(swap);
+            }
+        }
+        return swaps;
+    }
+
+    private void findAnySolution(Board pertialBoard){
+        Set<List<Position>> swaps = getAllSwaps(pertialBoard);
+
+    }
+    /*public Solution solve() {
+        PartialSolution initial = createInitialSolution();
+        return findAnySolution(initial);
+    }
+
+    private Solution findAnySolution(PartialSolution current) {
+        if (current.isComplete()) return current.toSolution();
+        if (current.shouldAbort()) return null;
+        for (var extension : current.extensions()) {
+            extension.apply(current);
+            var solution = findAnySolution(current);
+            if (solution != null) {
+                return solution;
+            } else {
+                extension.undo(current);
+            }
+        }
+        return null;
+    }
+    public static List<String> findAny(String string, List<String> tokens) {
+    return findAny(string, tokens, new ArrayList<>());
+    }
+
+    private static List<String> findAny(String remainingString, List<String> allTokens, List<String> usedTokens) {
+        if (remainingString.isEmpty()) return usedTokens;
+        // if (allTokens.stream().noneMatch(remainingString::startsWith)) return null; // overbodig
+        for (String tok : allTokens) {
+            if (remainingString.startsWith(tok)) {
+                usedTokens.add(tok);
+                var shorterString = remainingString.substring(tok.length());
+                var solution = findAny(shorterString, allTokens, usedTokens);
+                if (solution != null) {
+                    return solution;
+                } else {
+                    usedTokens.removeLast();
+                }
+            }
+        }
+        return null;
+    }
+    */
 }

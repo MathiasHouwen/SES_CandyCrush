@@ -72,7 +72,8 @@ public class CandycrushController {
                                                                @*@**@
                                                                *#@##*""");
 
-        model = model2;
+        model = model3;
+        //model = new CandycrushModel("Mathias");
         view = new CandycrushView(model);
         speelbord.getChildren().add(view);
         view.setOnMouseClicked(this::onCandyClicked);
