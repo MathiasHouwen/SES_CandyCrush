@@ -82,10 +82,12 @@ public class CandycrushController {
         reset.setOnMouseClicked(this::onResetClicked);
         reset.setDisable(true);
 
-        //System.out.println(model.solve());
-        Solution solution = model.solveAny();
+        /*Solution solution = model.solveAny();
         solution.printSolution();
-        model.setCandyBoard(solution.board());
+        model.setCandyBoard(solution.board());*/
+
+        Collection<Solution> solutions = model.solveAll();
+
     }
 
     public void update(){
@@ -145,5 +147,7 @@ public class CandycrushController {
             default -> throw new IllegalArgumentException("Unexpected value: " + c);
         };
     }
+
+
 
 }

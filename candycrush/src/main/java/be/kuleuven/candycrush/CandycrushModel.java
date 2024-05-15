@@ -288,17 +288,21 @@ public class CandycrushModel {
     }
 
     public Collection<Solution> solveAll(){
-        Solution intialSolution = new Solution(0,candyBoard);
+        List<List<Position>> moves = new ArrayList<>();
+        Solution intialSolution = new Solution(0,candyBoard, moves);
         ArrayList<Solution> collection = new ArrayList<>();
         return findAllSolutions(intialSolution, collection);
     }
-
 
     private Collection<Solution> findAllSolutions(Solution partialSolution, Collection<Solution> solutionsSoFar){
         Set<List<Position>> swaps = getAllSwaps(partialSolution.board());
 
         if(swaps.isEmpty()){
-            solutionsSoFar.add(partialSolution);
+            System.out.println("Oplossing gevonden B)");
+            int score = partialSolution.calculateScore();
+            Solution solution = new Solution(score, partialSolution.board(), partialSolution.moves());
+            solution.printSolution();
+            solutionsSoFar.add(solution);
             return solutionsSoFar;
         }
 
@@ -307,15 +311,17 @@ public class CandycrushModel {
             partialSolution.board().copyTo(mutableBoard);
 
             swapCandies(swap.getFirst(), swap.getLast(), mutableBoard);
-            int score = this.getScore();
-            findAllSolutions(new Solution(score, mutableBoard), solutionsSoFar);
-            swapCandies(swap.getFirst(), swap.getLast(), mutableBoard);
+
+            List<List<Position>> newMoves = new ArrayList<>(partialSolution.moves());
+            newMoves.add(swap);
+
+            findAllSolutions(new Solution(0, mutableBoard, newMoves), solutionsSoFar);
         }
         return solutionsSoFar;
     }
 
     public Solution solveAny(){
-        Solution intialSolution = new Solution(0,candyBoard);
+        Solution intialSolution = new Solution(0,candyBoard, null);
         return findAnySolution(intialSolution);
     }
 
@@ -336,7 +342,7 @@ public class CandycrushModel {
 
             swapCandies(swap.getFirst(), swap.getLast(), mutableBoard);
             int score = this.getScore();
-            return findAnySolution(new Solution(score, mutableBoard));
+            return findAnySolution(new Solution(score, mutableBoard, null));
         }
         return null;
     }

@@ -1,13 +1,22 @@
 package be.kuleuven.candycrush;
 
-public record Solution(int score, Board<Candy> board) {
+import java.util.List;
+
+public record Solution(int score, Board<Candy> board, List<List<Position>> moves) {
     public Solution {
-        if(score<0) throw new IllegalArgumentException("score > 0 moet >:(");
+        if(score<0) throw new IllegalArgumentException("score moet > 0 >:(");
     }
 
     public void printSolution(){
         System.out.println(score);
         board.printBoard();
+
+        for (List<Position> move : moves) {
+            for (Position position : move) {
+                System.out.print("(" + position.rij() + "," + position.kolom() + ") ");
+            }
+            System.out.println();
+        }
     }
 
     public int calculateScore(){
