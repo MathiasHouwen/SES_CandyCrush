@@ -11,11 +11,13 @@ public record Solution(int score, Board<Candy> board, List<List<Position>> moves
         System.out.println(score);
         board.printBoard();
 
-        for (List<Position> move : moves) {
-            for (Position position : move) {
-                System.out.print("(" + position.rij() + "," + position.kolom() + ") ");
+        if(moves != null){
+            for (List<Position> move : moves) {
+                for (Position position : move) {
+                    System.out.print("(" + position.rij() + "," + position.kolom() + ") ");
+                }
+                System.out.println();
             }
-            System.out.println();
         }
     }
 
@@ -30,5 +32,10 @@ public record Solution(int score, Board<Candy> board, List<List<Position>> moves
             return true;
         }
         return moves.size() > bestSoFar.moves().size();
+    }
+
+    public boolean canImproveUpon(Solution bestSoFar) {
+        return moves.size() > bestSoFar.moves().size() &&
+                score <= bestSoFar.score();
     }
 }

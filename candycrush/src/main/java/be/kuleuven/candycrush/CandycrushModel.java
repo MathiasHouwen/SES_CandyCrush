@@ -283,10 +283,15 @@ public class CandycrushModel {
 
         return findOptimalSolution(intialSolution, null);
     }
+
     private Solution findOptimalSolution(Solution partialSolution, Solution bestSoFar){
         Set<List<Position>> swaps = getAllSwaps(partialSolution.board());
 
         if(swaps.isEmpty()){
+            System.out.println(partialSolution.score());
+            System.out.println(partialSolution.calculateScore());
+            System.out.println("*-*");
+
             if (bestSoFar == null || partialSolution.isBetterThan(bestSoFar)) {
                 return partialSolution;
             } else {
@@ -294,7 +299,7 @@ public class CandycrushModel {
             }
         }
 
-        if(bestSoFar != null && bestSoFar.isBetterThan(partialSolution)){
+        if(bestSoFar != null && partialSolution.canImproveUpon(bestSoFar)){
             return bestSoFar;
         }
 
@@ -307,8 +312,8 @@ public class CandycrushModel {
             List<List<Position>> newMoves = new ArrayList<>(partialSolution.moves());
             newMoves.add(swap);
 
-            Solution newSolution = new Solution(0, mutableBoard, newMoves);
-            int score = newSolution.calculateScore();
+            Solution solution = new Solution(0, mutableBoard, newMoves);
+            int score = solution.calculateScore();
             bestSoFar = findOptimalSolution(new Solution(score, mutableBoard, newMoves), bestSoFar);
         }
 

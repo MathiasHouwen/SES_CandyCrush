@@ -82,14 +82,14 @@ public class CandycrushController {
         reset.setOnMouseClicked(this::onResetClicked);
         reset.setDisable(true);
 
-        /*Solution solution = model.solveAny();
+        Solution solution = model.solveAny();
         solution.printSolution();
-        model.setCandyBoard(solution.board());*/
+        model.setCandyBoard(solution.board());
 
         //Collection<Solution> solutions = model.solveAll();
 
-        Solution solution = model.maximizeScore();
-        solution.printSolution();
+        /*Solution solution = model.maximizeScore();
+        solution.printSolution();*/
     }
 
     public void update(){
