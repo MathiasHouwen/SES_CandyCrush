@@ -283,7 +283,34 @@ public class CandycrushModel {
                 .count();
     }
 
-    public Solution solve(){
+    public Collection<Solution> solveAll(){
+        Solution intialSolution = new Solution(0,candyBoard);
+        ArrayList<Solution> collection = new ArrayList<>();
+        return findAllSolutions(intialSolution, collection);
+    }
+
+
+    private Collection<Solution> findAllSolutions(Solution partialSolution, Collection<Solution> solutionsSoFar){
+        Set<List<Position>> swaps = getAllSwaps(partialSolution.board());
+
+        if(swaps.isEmpty()){
+            solutionsSoFar.add(partialSolution);
+            return solutionsSoFar;
+        }
+
+        for(List<Position> swap : swaps){
+            Board<Candy> mutableBoard = new Board<>(partialSolution.board().getBoardSize());
+            partialSolution.board().copyTo(mutableBoard);
+
+            swapCandies(swap.getFirst(), swap.getLast());
+            int score = this.getScore();
+            findAllSolutions(new Solution(score, mutableBoard), solutionsSoFar);
+            swapCandies(swap.getFirst(), swap.getLast());
+        }
+        return solutionsSoFar;
+    }
+
+    public Solution solveAny(){
         Solution intialSolution = new Solution(0,candyBoard);
         return findAnySolution(intialSolution);
     }

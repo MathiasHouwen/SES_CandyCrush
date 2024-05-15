@@ -1,6 +1,7 @@
 package be.kuleuven.candycrush;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -82,7 +83,8 @@ public class CandycrushController {
         reset.setDisable(true);
 
         //System.out.println(model.solve());
-        Solution solution = model.solve();
+        Collection<Solution> solution = model.solveAll();
+        int a = 0;
         //solution.printSolution();
     }
 
