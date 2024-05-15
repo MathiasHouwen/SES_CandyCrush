@@ -274,9 +274,31 @@ public class CandycrushModel {
         return swaps;
     }
 
-    private void findAnySolution(Board pertialBoard){
-        Set<List<Position>> swaps = getAllSwaps(pertialBoard);
+    public Solution solve(){
+        Solution intialSolution = new Solution(0,candyBoard);
+        return findAnySolution(intialSolution);
+    }
 
+    private Solution findAnySolution(Solution partialSolution){
+        Set<List<Position>> swaps = getAllSwaps(partialSolution.board());
+
+        if(swaps.isEmpty()) return partialSolution; // Current.isComplete()
+
+        for (List<Position> swap : swaps){
+            // SWAP
+            // 1. copy board vanuit record
+            // 2. swapcandies en update
+            // 3. maak partialSolution
+            // 4. recursie
+
+            Board<Candy> mutableBoard = new Board<>(partialSolution.board().getBoardSize());
+            partialSolution.board().copyTo(mutableBoard);
+
+            swapCandies(swap.getFirst(), swap.getLast(), partialSolution.board());
+            int score = calculateScore(mutableBoard);
+            return findAnySolution(new Solution(score, mutableBoard));
+        }
+        return null;
     }
     /*public Solution solve() {
         PartialSolution initial = createInitialSolution();
