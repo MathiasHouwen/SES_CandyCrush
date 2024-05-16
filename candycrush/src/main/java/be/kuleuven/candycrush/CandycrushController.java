@@ -73,7 +73,7 @@ public class CandycrushController {
                                                                @*@**@
                                                                *#@##*""");
 
-        model = model1;
+        model = model3;
         //model = new CandycrushModel("Mathias", 10, 10);
         view = new CandycrushView(model);
         speelbord.getChildren().add(view);
@@ -82,14 +82,14 @@ public class CandycrushController {
         reset.setOnMouseClicked(this::onResetClicked);
         reset.setDisable(true);
 
-        Solution solution = model.solveAny();
+        /*Solution solution = model.solveAny();
         solution.printSolution();
-        model.setCandyBoard(solution.board());
+        model.setCandyBoard(solution.board());*/
 
         //Collection<Solution> solutions = model.solveAll();
 
-        /*Solution solution = model.maximizeScore();
-        solution.printSolution();*/
+        Solution solution = model.maximizeScore();
+        solution.printSolution();
     }
 
     public void update(){
